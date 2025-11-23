@@ -15,6 +15,8 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Product form
   const [productName, setProductName] = useState("");
@@ -27,16 +29,40 @@ const AdminDashboard = () => {
   const [partnerLogo, setPartnerLogo] = useState("");
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem("admin_authenticated");
-    if (!isAuthenticated) {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      toast.error("Please login to access admin dashboard");
       navigate("/admin");
+      return;
     }
+
+    // Check if user has admin role
+    const { data: roleData, error: roleError } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", session.user.id)
+      .eq("role", "admin")
+      .single();
+
+    if (roleError || !roleData) {
+      toast.error("Unauthorized: Admin access required");
+      navigate("/");
+      return;
+    }
+
+    setIsAdmin(true);
+    setLoading(false);
     fetchData();
-  }, [navigate]);
+  };
 
   const fetchData = async () => {
-    const { data: productsData } = await supabase.from("products").select("*");
-    const { data: partnersData } = await supabase.from("partners").select("*");
+    const { data: productsData } = await supabase.from("products").select("*").order("created_at", { ascending: false });
+    const { data: partnersData } = await supabase.from("partners").select("*").order("display_order", { ascending: true });
     const { data: feedbackData } = await supabase.from("feedback").select("*").order("created_at", { ascending: false });
 
     setProducts(productsData || []);
@@ -44,8 +70,8 @@ const AdminDashboard = () => {
     setFeedback(feedbackData || []);
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("admin_authenticated");
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast.success("Logged out successfully");
     navigate("/");
   };
@@ -61,12 +87,13 @@ const AdminDashboard = () => {
         name: productName,
         description: productDesc,
         price: parseFloat(productPrice),
-        image_url: productImage,
+        image_url: productImage || null,
       },
     ]);
 
     if (error) {
-      toast.error("Failed to add product");
+      toast.error("Failed to add product: " + error.message);
+      console.error("Error adding product:", error);
     } else {
       toast.success("Product added successfully");
       setProductName("");
@@ -101,7 +128,7 @@ const AdminDashboard = () => {
     ]);
 
     if (error) {
-      toast.error("Failed to add partner");
+      toast.error("Failed to add partner: " + error.message);
     } else {
       toast.success("Partner added successfully");
       setPartnerName("");
@@ -143,6 +170,18 @@ const AdminDashboard = () => {
       fetchData();
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-xl text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">
