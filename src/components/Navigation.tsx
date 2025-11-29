@@ -11,9 +11,14 @@ const Navigation = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
               <Settings className="w-6 h-6 text-primary-foreground animate-gear-spin" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-              Shivansh Enginnering
-            </span>
+            <div className="flex flex-col leading-none">
+              <span className="text-3xl font-bold text-red-600">
+                Shivansh
+              </span>
+              <span className="text-xl font-normal text-blue-600">
+                Engineering
+              </span>
+            </div>
           </Link>
           
           <div className="flex items-center gap-6">

@@ -10,7 +10,7 @@ const About = () => {
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
           <h1 className="text-5xl md:text-6xl font-bold text-center mb-8 animate-fade-up">
-            About <span className="text-primary">Shivansh Enginnering</span>
+            About <span className="text-primary">Shivansh Engineering</span>
           </h1>
           
           <div className="max-w-4xl mx-auto space-y-12">
@@ -18,7 +18,7 @@ const About = () => {
               <h2 className="text-3xl font-bold text-foreground mb-4">Our Story</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Founded with a vision to revolutionize the mechanical machinery industry, 
-                Shivansh Enginnering has grown to become a trusted name in precision engineering. 
+                Shivansh Engineering has grown to become a trusted name in precision engineering. 
                 With over 25 years of experience, we've consistently delivered exceptional quality 
                 machinery solutions to clients across diverse industries.
               </p>
@@ -90,7 +90,7 @@ const About = () => {
 
       <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-lg">© 2025 Shivansh Enginnering. All rights reserved.</p>
+          <p className="text-lg">© 2025 Shivansh Engineering. All rights reserved.</p>
         </div>
       </footer>
     </div>
