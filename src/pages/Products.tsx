@@ -93,7 +93,7 @@ const Products = () => {
 
       <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-lg">© 2025 Shivansh Enginnering. All rights reserved.</p>
+          <p className="text-lg">© 2025 Shivansh Engineering. All rights reserved.</p>
         </div>
       </footer>
     </div>

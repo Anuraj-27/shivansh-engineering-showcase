@@ -41,6 +41,48 @@ export type Database = {
         }
         Relationships: []
       }
+      machinery_images: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+        }
+        Relationships: []
+      }
+      owner_info: {
+        Row: {
+          id: string
+          photo_url: string
+          thought: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          photo_url: string
+          thought: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          photo_url?: string
+          thought?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           created_at: string
