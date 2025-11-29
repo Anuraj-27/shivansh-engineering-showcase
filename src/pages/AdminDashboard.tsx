@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Trash2, Check, X } from "lucide-react";
+import { Trash2, Check, X, Upload } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -37,9 +37,53 @@ const AdminDashboard = () => {
   // Machinery form
   const [machineryImage, setMachineryImage] = useState("");
 
+  // File upload states
+  const [uploadingFile, setUploadingFile] = useState(false);
+
   useEffect(() => {
     checkAuth();
   }, []);
+
+  const uploadFile = async (file: File, folder: string): Promise<string | null> => {
+    try {
+      setUploadingFile(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folder}/${Math.random()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName);
+
+      return data.publicUrl;
+    } catch (error: any) {
+      toast.error("Failed to upload file: " + error.message);
+      return null;
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setUrlFunction: (url: string) => void
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const url = await uploadFile(file, 'uploads');
+    if (url) {
+      setUrlFunction(url);
+      toast.success("File uploaded successfully");
+    }
+  };
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -298,12 +342,31 @@ const AdminDashboard = () => {
                     value={productPrice}
                     onChange={(e) => setProductPrice(e.target.value)}
                   />
-                  <Input
-                    placeholder="Image URL"
-                    value={productImage}
-                    onChange={(e) => setProductImage(e.target.value)}
-                    className="md:col-span-2"
-                  />
+                  <div className="md:col-span-2 space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setProductImage)}
+                        className="hidden"
+                        id="product-image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('product-image-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Image"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Image URL"
+                      value={productImage}
+                      onChange={(e) => setProductImage(e.target.value)}
+                    />
+                  </div>
                   <Textarea
                     placeholder="Description"
                     value={productDesc}
@@ -344,11 +407,31 @@ const AdminDashboard = () => {
                     value={partnerName}
                     onChange={(e) => setPartnerName(e.target.value)}
                   />
-                  <Input
-                    placeholder="Logo URL"
-                    value={partnerLogo}
-                    onChange={(e) => setPartnerLogo(e.target.value)}
-                  />
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setPartnerLogo)}
+                        className="hidden"
+                        id="partner-logo-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('partner-logo-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Logo"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Logo URL"
+                      value={partnerLogo}
+                      onChange={(e) => setPartnerLogo(e.target.value)}
+                    />
+                  </div>
                   <Button onClick={addPartner}>Add Partner</Button>
                 </div>
               </Card>
@@ -376,11 +459,31 @@ const AdminDashboard = () => {
                   {ownerInfo ? "Update Owner Info" : "Add Owner Info"}
                 </h2>
                 <div className="grid gap-4">
-                  <Input
-                    placeholder="Owner Photo URL"
-                    value={ownerPhoto || ownerInfo?.photo_url || ""}
-                    onChange={(e) => setOwnerPhoto(e.target.value)}
-                  />
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setOwnerPhoto)}
+                        className="hidden"
+                        id="owner-photo-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('owner-photo-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Photo"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Photo URL"
+                      value={ownerPhoto || ownerInfo?.photo_url || ""}
+                      onChange={(e) => setOwnerPhoto(e.target.value)}
+                    />
+                  </div>
                   <Textarea
                     placeholder="Owner's Thought"
                     value={ownerThought || ownerInfo?.thought || ""}
@@ -414,11 +517,31 @@ const AdminDashboard = () => {
               <Card className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Add Machinery Image</h2>
                 <div className="grid gap-4">
-                  <Input
-                    placeholder="Machinery Image URL"
-                    value={machineryImage}
-                    onChange={(e) => setMachineryImage(e.target.value)}
-                  />
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setMachineryImage)}
+                        className="hidden"
+                        id="machinery-image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('machinery-image-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Image"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Image URL"
+                      value={machineryImage}
+                      onChange={(e) => setMachineryImage(e.target.value)}
+                    />
+                  </div>
                   <Button onClick={addMachineryImage}>Add Image</Button>
                 </div>
               </Card>

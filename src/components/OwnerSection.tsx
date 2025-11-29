@@ -37,10 +37,6 @@ const OwnerSection = () => {
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 animate-fade-up">
-          Message from the <span className="text-primary">Owner</span>
-        </h2>
-        
         <Card className="max-w-4xl mx-auto p-8 md:p-12 border-border/50 hover:shadow-xl transition-all animate-fade-in">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-48 h-48 flex-shrink-0">

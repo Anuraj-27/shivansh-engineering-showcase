@@ -12,10 +12,10 @@ const Navigation = () => {
               <Settings className="w-6 h-6 text-primary-foreground animate-gear-spin" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-3xl font-bold text-red-600">
+              <span className="text-4xl font-bold text-red-600 font-britannic">
                 Shivansh
               </span>
-              <span className="text-xl font-normal text-blue-600">
+              <span className="text-2xl font-normal text-blue-600 font-britannic">
                 Engineering
               </span>
             </div>
