@@ -1,24 +1,22 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
+import logo from "@/assets/shivansh-engineering-logo.png";
 
 const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
               <Settings className="w-6 h-6 text-primary-foreground animate-gear-spin" />
             </div>
-            <div className="flex flex-col leading-none">
-              <span className="text-4xl font-bold text-red-600 font-britannic">
-                Shivansh
-              </span>
-              <span className="text-2xl font-normal text-blue-600 font-britannic">
-                Engineering
-              </span>
-            </div>
+            <img 
+              src={logo} 
+              alt="Shivansh Engineering" 
+              className="h-12 w-auto object-contain"
+            />
           </Link>
           
           <div className="flex items-center gap-6">
