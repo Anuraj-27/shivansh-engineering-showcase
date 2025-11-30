@@ -1,8 +1,48 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    mobile: "",
+    email: "",
+    designation: "",
+    description: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.functions.invoke("send-inquiry", {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      toast.success("Inquiry sent successfully!");
+      setFormData({
+        name: "",
+        mobile: "",
+        email: "",
+        designation: "",
+        description: ""
+      });
+    } catch (error: any) {
+      toast.error("Failed to send inquiry: " + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -81,13 +121,66 @@ const Contact = () => {
 
           <Card className="mt-12 p-8 border-border/50 max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: "400ms" }}>
             <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-              We're Here to Help
+              Inquiry Form
             </h2>
-            <p className="text-lg text-muted-foreground text-center">
-              Whether you need technical support, product information, or want to discuss 
-              a custom solution, our team of experts is ready to assist you. Contact us 
-              through any of the above channels, and we'll get back to you promptly.
-            </p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Name *</label>
+                  <Input
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    placeholder="Your full name"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Mobile Number *</label>
+                  <Input
+                    required
+                    type="tel"
+                    value={formData.mobile}
+                    onChange={(e) => setFormData({...formData, mobile: e.target.value})}
+                    placeholder="Your mobile number"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
+                  <Input
+                    required
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Designation</label>
+                  <Input
+                    value={formData.designation}
+                    onChange={(e) => setFormData({...formData, designation: e.target.value})}
+                    placeholder="Your designation"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">Description *</label>
+                <Textarea
+                  required
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  placeholder="Please describe your inquiry in detail"
+                  className="min-h-[150px]"
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-gradient-to-r from-primary to-primary-glow"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Submit Inquiry"}
+              </Button>
+            </form>
           </Card>
         </div>
       </div>

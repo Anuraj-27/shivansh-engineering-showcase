@@ -64,10 +64,6 @@ const About = () => {
               <ul className="space-y-4 text-lg text-muted-foreground">
                 <li className="flex items-start">
                   <span className="text-primary mr-3">✓</span>
-                  <span>ISO certified manufacturing processes ensuring uncompromising quality</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3">✓</span>
                   <span>State-of-the-art R&D facilities driving continuous innovation</span>
                 </li>
                 <li className="flex items-start">
@@ -77,10 +73,6 @@ const About = () => {
                 <li className="flex items-start">
                   <span className="text-primary mr-3">✓</span>
                   <span>Comprehensive after-sales support and maintenance services</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-3">✓</span>
-                  <span>Commitment to environmental sustainability and safety standards</span>
                 </li>
               </ul>
             </Card>
