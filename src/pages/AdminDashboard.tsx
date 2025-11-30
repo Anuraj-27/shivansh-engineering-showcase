@@ -22,7 +22,6 @@ const AdminDashboard = () => {
   // Product form
   const [productName, setProductName] = useState("");
   const [productDesc, setProductDesc] = useState("");
-  const [productPrice, setProductPrice] = useState("");
   const [productImage, setProductImage] = useState("");
 
   // Partner form
@@ -127,8 +126,8 @@ const AdminDashboard = () => {
   };
 
   const addProduct = async () => {
-    if (!productName || !productPrice) {
-      toast.error("Please fill in required fields");
+    if (!productName) {
+      toast.error("Please fill in product name");
       return;
     }
 
@@ -136,7 +135,7 @@ const AdminDashboard = () => {
       {
         name: productName,
         description: productDesc,
-        price: parseFloat(productPrice),
+        price: 0,
         image_url: productImage || null,
       },
     ]);
@@ -148,7 +147,6 @@ const AdminDashboard = () => {
       toast.success("Product added successfully");
       setProductName("");
       setProductDesc("");
-      setProductPrice("");
       setProductImage("");
       fetchData();
     }
@@ -288,19 +286,13 @@ const AdminDashboard = () => {
             <TabsContent value="products" className="space-y-8">
               <Card className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4">
                   <Input
                     placeholder="Product Name"
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
                   />
-                  <Input
-                    placeholder="Price"
-                    type="number"
-                    value={productPrice}
-                    onChange={(e) => setProductPrice(e.target.value)}
-                  />
-                  <div className="md:col-span-2 space-y-2">
+                  <div className="space-y-2">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="file"
@@ -329,9 +321,8 @@ const AdminDashboard = () => {
                     placeholder="Description"
                     value={productDesc}
                     onChange={(e) => setProductDesc(e.target.value)}
-                    className="md:col-span-2"
                   />
-                  <Button onClick={addProduct} className="md:col-span-2">
+                  <Button onClick={addProduct}>
                     Add Product
                   </Button>
                 </div>
@@ -341,8 +332,7 @@ const AdminDashboard = () => {
                 {products.map((product) => (
                   <Card key={product.id} className="p-6">
                     <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-                    <p className="text-muted-foreground mb-2">{product.description}</p>
-                    <p className="text-2xl font-bold text-primary mb-4">₹{product.price}</p>
+                    <p className="text-muted-foreground mb-4">{product.description}</p>
                     <Button
                       onClick={() => deleteProduct(product.id)}
                       variant="destructive"

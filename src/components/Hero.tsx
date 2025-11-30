@@ -24,18 +24,6 @@ const Hero = () => {
           Leading the industry in mechanical machinery solutions with unmatched quality, 
           reliability, and innovation. Your trusted partner for industrial excellence.
         </p>
-        <div className="flex gap-4 justify-center animate-fade-in">
-          <Link to="/products">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6 hover:scale-105 transition-transform">
-              View Our Products
-            </Button>
-          </Link>
-          <Link to="/contact">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6 hover:scale-105 transition-transform">
-              Contact Us
-            </Button>
-          </Link>
-        </div>
       </div>
     </section>
   );

@@ -8,16 +8,16 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-2 bg-background/95 backdrop-blur-md px-4 py-2 rounded-lg">
             <img 
               src={seLogo} 
               alt="SE Logo" 
-              className="h-16 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
             <img 
               src={logo} 
               alt="Shivansh Engineering" 
-              className="h-20 w-auto object-contain"
+              className="h-16 w-auto object-contain"
             />
           </Link>
           
@@ -35,6 +35,11 @@ const Navigation = () => {
             <Link to="/contact">
               <Button variant="ghost" className="text-foreground hover:text-primary transition-colors">
                 Contact Us
+              </Button>
+            </Link>
+            <Link to="/gallery">
+              <Button variant="ghost" className="text-foreground hover:text-primary transition-colors">
+                Gallery
               </Button>
             </Link>
             <Link to="/admin">
