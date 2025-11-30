@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
+import seLogo from "@/assets/se-logo.png";
 import logo from "@/assets/shivansh-engineering-logo.png";
 
 const Navigation = () => {
@@ -9,9 +9,11 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-              <Settings className="w-6 h-6 text-primary-foreground animate-gear-spin" />
-            </div>
+            <img 
+              src={seLogo} 
+              alt="SE Logo" 
+              className="h-16 w-auto object-contain"
+            />
             <img 
               src={logo} 
               alt="Shivansh Engineering" 
