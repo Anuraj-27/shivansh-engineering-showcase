@@ -33,7 +33,7 @@ const PartnersSlider = () => {
   const duplicatedPartners = [...partners, ...partners, ...partners];
 
   return (
-    <section className="fixed left-0 top-32 h-[calc(100vh-8rem)] w-48 z-40 overflow-hidden">
+    <section className="fixed right-0 top-32 h-[calc(100vh-8rem)] w-48 z-40 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-full">
         <h2 className="text-xl font-bold text-center text-foreground mb-4 px-2 bg-background/95 backdrop-blur-md py-4">
           Trusted By <span className="text-primary">Industry Leaders</span>
@@ -49,7 +49,7 @@ const PartnersSlider = () => {
                 <img
                   src={partner.logo_url}
                   alt={partner.name}
-                  className="max-w-full max-h-full object-contain filter grayscale hover:grayscale-0 transition-all"
+                  className="max-w-full max-h-full object-contain transition-all"
                 />
               </div>
             ))}
