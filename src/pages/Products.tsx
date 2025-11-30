@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
   image_url: string;
 }
 
@@ -74,15 +72,7 @@ const Products = () => {
                     <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {product.name}
                     </h3>
-                    <p className="text-muted-foreground mb-4">{product.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-primary">
-                        ₹{product.price.toLocaleString()}
-                      </span>
-                      <Button className="bg-gradient-to-r from-primary to-primary-glow hover:shadow-lg">
-                        Inquire Now
-                      </Button>
-                    </div>
+                    <p className="text-muted-foreground">{product.description}</p>
                   </div>
                 </Card>
               ))}
