@@ -15,7 +15,7 @@ const Navigation = () => {
             <img 
               src={logo} 
               alt="Shivansh Engineering" 
-              className="h-12 w-auto object-contain"
+              className="h-20 w-auto object-contain"
             />
           </Link>
           
