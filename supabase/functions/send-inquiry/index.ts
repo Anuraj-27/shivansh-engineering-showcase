@@ -29,7 +29,7 @@ Email: ${email}
 Designation: ${designation || "Not provided"}
 Description: ${description}`;
 
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=918888845711&text=${encodeURIComponent(whatsappMessage)}`;
+    const whatsappUrl = `https://wa.me/918888845711?text=${encodeURIComponent(whatsappMessage)}`;
 
     console.log("Inquiry processed successfully");
     console.log("WhatsApp URL:", whatsappUrl);
