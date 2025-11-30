@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TrustSection from "@/components/TrustSection";
 import PartnersSlider from "@/components/PartnersSlider";
-import OwnerSection from "@/components/OwnerSection";
+import CompanyProfile from "@/components/CompanyProfile";
 import MachinerySlider from "@/components/MachinerySlider";
 import FeedbackDisplay from "@/components/FeedbackDisplay";
 import FeedbackForm from "@/components/FeedbackForm";
@@ -14,7 +14,7 @@ const Home = () => {
       <Hero />
       <TrustSection />
       <PartnersSlider />
-      <OwnerSection />
+      <CompanyProfile />
       <MachinerySlider />
       <FeedbackDisplay />
       <FeedbackForm />

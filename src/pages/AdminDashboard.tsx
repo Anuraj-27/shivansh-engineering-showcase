@@ -15,7 +15,6 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
-  const [ownerInfo, setOwnerInfo] = useState<any>(null);
   const [machineryImages, setMachineryImages] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,10 +28,6 @@ const AdminDashboard = () => {
   // Partner form
   const [partnerName, setPartnerName] = useState("");
   const [partnerLogo, setPartnerLogo] = useState("");
-
-  // Owner form
-  const [ownerPhoto, setOwnerPhoto] = useState("");
-  const [ownerThought, setOwnerThought] = useState("");
 
   // Machinery form
   const [machineryImage, setMachineryImage] = useState("");
@@ -117,13 +112,11 @@ const AdminDashboard = () => {
     const { data: productsData } = await supabase.from("products").select("*").order("created_at", { ascending: false });
     const { data: partnersData } = await supabase.from("partners").select("*").order("display_order", { ascending: true });
     const { data: feedbackData } = await supabase.from("feedback").select("*").order("created_at", { ascending: false });
-    const { data: ownerData } = await supabase.from("owner_info").select("*").limit(1).maybeSingle();
     const { data: machineryData } = await supabase.from("machinery_images").select("*").order("display_order", { ascending: true });
 
     setProducts(productsData || []);
     setPartners(partnersData || []);
     setFeedback(feedbackData || []);
-    setOwnerInfo(ownerData);
     setMachineryImages(machineryData || []);
   };
 
@@ -228,40 +221,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const saveOwnerInfo = async () => {
-    if (!ownerPhoto || !ownerThought) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
-    if (ownerInfo) {
-      const { error } = await supabase
-        .from("owner_info")
-        .update({ photo_url: ownerPhoto, thought: ownerThought })
-        .eq("id", ownerInfo.id);
-
-      if (error) {
-        toast.error("Failed to update owner info");
-      } else {
-        toast.success("Owner info updated");
-        fetchData();
-      }
-    } else {
-      const { error } = await supabase
-        .from("owner_info")
-        .insert([{ photo_url: ownerPhoto, thought: ownerThought }]);
-
-      if (error) {
-        toast.error("Failed to add owner info");
-      } else {
-        toast.success("Owner info added");
-        setOwnerPhoto("");
-        setOwnerThought("");
-        fetchData();
-      }
-    }
-  };
-
   const addMachineryImage = async () => {
     if (!machineryImage) {
       toast.error("Please provide an image URL");
@@ -319,10 +278,9 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
-              <TabsTrigger value="owner">Owner</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
             </TabsList>
@@ -451,66 +409,6 @@ const AdminDashboard = () => {
                   </Card>
                 ))}
               </div>
-            </TabsContent>
-
-            <TabsContent value="owner" className="space-y-8">
-              <Card className="p-6">
-                <h2 className="text-2xl font-bold mb-4">
-                  {ownerInfo ? "Update Owner Info" : "Add Owner Info"}
-                </h2>
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileUpload(e, setOwnerPhoto)}
-                        className="hidden"
-                        id="owner-photo-upload"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => document.getElementById('owner-photo-upload')?.click()}
-                        disabled={uploadingFile}
-                      >
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingFile ? "Uploading..." : "Browse Photo"}
-                      </Button>
-                    </label>
-                    <Input
-                      placeholder="Or paste Photo URL"
-                      value={ownerPhoto || ownerInfo?.photo_url || ""}
-                      onChange={(e) => setOwnerPhoto(e.target.value)}
-                    />
-                  </div>
-                  <Textarea
-                    placeholder="Owner's Thought"
-                    value={ownerThought || ownerInfo?.thought || ""}
-                    onChange={(e) => setOwnerThought(e.target.value)}
-                    rows={4}
-                  />
-                  <Button onClick={saveOwnerInfo}>
-                    {ownerInfo ? "Update Owner Info" : "Add Owner Info"}
-                  </Button>
-                </div>
-              </Card>
-
-              {ownerInfo && (
-                <Card className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Current Owner Info</h3>
-                  <div className="flex gap-4">
-                    <img
-                      src={ownerInfo.photo_url}
-                      alt="Owner"
-                      className="w-32 h-32 object-cover rounded-lg"
-                    />
-                    <div>
-                      <p className="text-muted-foreground italic">"{ownerInfo.thought}"</p>
-                    </div>
-                  </div>
-                </Card>
-              )}
             </TabsContent>
 
             <TabsContent value="machinery" className="space-y-8">
