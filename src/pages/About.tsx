@@ -19,7 +19,7 @@ const About = () => {
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Founded with a vision to revolutionize the mechanical machinery industry, 
                 Shivansh Engineering has grown to become a trusted name in precision engineering. 
-                With over 25 years of experience, we've consistently delivered exceptional quality 
+                With over 20 years of experience, we've consistently delivered exceptional quality 
                 machinery solutions to clients across diverse industries.
               </p>
             </Card>

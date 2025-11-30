@@ -11,7 +11,7 @@ const TrustSection = () => {
     {
       icon: Award,
       title: "Industry Leader",
-      description: "25+ years of excellence in mechanical engineering solutions"
+      description: "20+ years of excellence in mechanical engineering solutions"
     },
     {
       icon: Users,
