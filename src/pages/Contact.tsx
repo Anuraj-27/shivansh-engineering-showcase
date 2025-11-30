@@ -23,18 +23,13 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("send-inquiry", {
+      const { error } = await supabase.functions.invoke("send-inquiry", {
         body: formData
       });
 
       if (error) throw error;
 
-      // Open WhatsApp with pre-filled message
-      if (data?.whatsappUrl) {
-        window.open(data.whatsappUrl, '_blank');
-      }
-
-      toast.success("Inquiry sent! Opening WhatsApp...");
+      toast.success("Inquiry sent to WhatsApp successfully!");
       setFormData({
         name: "",
         mobile: "",
