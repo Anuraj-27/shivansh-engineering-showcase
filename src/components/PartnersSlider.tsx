@@ -33,18 +33,18 @@ const PartnersSlider = () => {
   const duplicatedPartners = [...partners, ...partners, ...partners];
 
   return (
-    <section className="fixed right-0 top-32 h-[calc(100vh-8rem)] w-48 z-40 overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-full">
-        <h2 className="text-xl font-bold text-center text-foreground mb-4 px-2 bg-background/95 backdrop-blur-md py-4">
+    <section className="w-full py-12 overflow-hidden bg-background/50 backdrop-blur-sm">
+      <div className="container mx-auto px-6">
+        <h2 className="text-3xl font-bold text-center text-foreground mb-8">
           Trusted By <span className="text-primary">Industry Leaders</span>
         </h2>
         
-        <div className="relative h-full">
-          <div className="flex flex-col gap-8 animate-slide-down">
+        <div className="relative">
+          <div className="flex gap-12 animate-slide-left">
             {duplicatedPartners.map((partner, index) => (
               <div
                 key={`${partner.id}-${index}`}
-                className="flex-shrink-0 w-40 h-28 mx-auto flex items-center justify-center bg-card rounded-lg border border-border/50 p-4 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                className="flex-shrink-0 w-48 h-32 flex items-center justify-center bg-card rounded-lg border border-border/50 p-6 transition-all duration-300 hover:scale-110 hover:shadow-lg"
               >
                 <img
                   src={partner.logo_url}
@@ -56,8 +56,8 @@ const PartnersSlider = () => {
           </div>
           
           {/* Gradient overlays for fade effect */}
-          <div className="absolute left-0 right-0 top-0 h-32 bg-gradient-to-b from-background to-transparent pointer-events-none"></div>
-          <div className="absolute left-0 right-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none"></div>
         </div>
       </div>
     </section>
