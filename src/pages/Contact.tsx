@@ -25,9 +25,10 @@ const Contact = () => {
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">Our Location</h3>
                   <p className="text-muted-foreground">
-                    Industrial Area, Sector 25<br />
-                    Engineering District<br />
-                    City, State - 123456
+                    Unit II, Gat No 882/1/3A,<br />
+                    Behind Nisarg Hotel, Pune Nagar Road,<br />
+                    Sanaswadi, Tal. Shirur,<br />
+                    Dist. Pune (MH) 412 208
                   </p>
                 </div>
               </div>
@@ -41,8 +42,7 @@ const Contact = () => {
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">Phone</h3>
                   <p className="text-muted-foreground">
-                    +91 1234567890<br />
-                    +91 0987654321
+                    +91 88888 45711
                   </p>
                 </div>
               </div>
@@ -56,8 +56,7 @@ const Contact = () => {
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">Email</h3>
                   <p className="text-muted-foreground">
-                    info@shivanshengineering.com<br />
-                    sales@shivanshengineering.com
+                    shivanshengineering@yahoo.in
                   </p>
                 </div>
               </div>
@@ -71,9 +70,9 @@ const Contact = () => {
                 <div>
                   <h3 className="text-xl font-bold text-foreground mb-2">Business Hours</h3>
                   <p className="text-muted-foreground">
-                    Monday - Friday: 9:00 AM - 6:00 PM<br />
-                    Saturday: 9:00 AM - 2:00 PM<br />
-                    Sunday: Closed
+                    Monday - Wednesday: Open<br />
+                    Thursday: Closed<br />
+                    Friday - Sunday: Open
                   </p>
                 </div>
               </div>
