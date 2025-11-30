@@ -79,22 +79,7 @@ const Contact = () => {
             </Card>
           </div>
 
-          <Card className="mt-12 p-0 border-border/50 max-w-4xl mx-auto overflow-hidden animate-fade-in" style={{ animationDelay: "400ms" }}>
-            <div className="aspect-video w-full">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.234567890!2d73.123456!3d18.654321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDM5JzE1LjYiTiA3M8KwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Shivansh Engineering Location"
-              ></iframe>
-            </div>
-          </Card>
-
-          <Card className="mt-12 p-8 border-border/50 max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: "500ms" }}>
+          <Card className="mt-12 p-8 border-border/50 max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: "400ms" }}>
             <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
               We're Here to Help
             </h2>
