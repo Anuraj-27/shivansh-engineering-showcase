@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   const [partners, setPartners] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
   const [machineryImages, setMachineryImages] = useState<any[]>([]);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +31,10 @@ const AdminDashboard = () => {
 
   // Machinery form
   const [machineryImage, setMachineryImage] = useState("");
+
+  // Gallery form
+  const [galleryImage, setGalleryImage] = useState("");
+  const [galleryTitle, setGalleryTitle] = useState("");
 
   // File upload states
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -112,11 +117,13 @@ const AdminDashboard = () => {
     const { data: partnersData } = await supabase.from("partners").select("*").order("display_order", { ascending: true });
     const { data: feedbackData } = await supabase.from("feedback").select("*").order("created_at", { ascending: false });
     const { data: machineryData } = await supabase.from("machinery_images").select("*").order("display_order", { ascending: true });
+    const { data: galleryData } = await supabase.from("gallery_images").select("*").order("display_order", { ascending: true });
 
     setProducts(productsData || []);
     setPartners(partnersData || []);
     setFeedback(feedbackData || []);
     setMachineryImages(machineryData || []);
+    setGalleryImages(galleryData || []);
   };
 
   const handleLogout = async () => {
@@ -248,6 +255,39 @@ const AdminDashboard = () => {
     }
   };
 
+  const addGalleryImage = async () => {
+    if (!galleryImage) {
+      toast.error("Please provide an image URL");
+      return;
+    }
+
+    const { error } = await supabase.from("gallery_images").insert([
+      { 
+        image_url: galleryImage,
+        title: galleryTitle || null
+      },
+    ]);
+
+    if (error) {
+      toast.error("Failed to add gallery image");
+    } else {
+      toast.success("Gallery image added");
+      setGalleryImage("");
+      setGalleryTitle("");
+      fetchData();
+    }
+  };
+
+  const deleteGalleryImage = async (id: string) => {
+    const { error } = await supabase.from("gallery_images").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete gallery image");
+    } else {
+      toast.success("Gallery image deleted");
+      fetchData();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -276,10 +316,11 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsList className="grid w-full grid-cols-5 mb-8">
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
+              <TabsTrigger value="gallery">Gallery</TabsTrigger>
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
             </TabsList>
 
@@ -444,6 +485,69 @@ const AdminDashboard = () => {
                     />
                     <Button
                       onClick={() => deleteMachineryImage(image.id)}
+                      variant="destructive"
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="gallery" className="space-y-8">
+              <Card className="p-6">
+                <h2 className="text-2xl font-bold mb-4">Add Gallery Image</h2>
+                <div className="grid gap-4">
+                  <Input
+                    placeholder="Image Title (Optional)"
+                    value={galleryTitle}
+                    onChange={(e) => setGalleryTitle(e.target.value)}
+                  />
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setGalleryImage)}
+                        className="hidden"
+                        id="gallery-image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('gallery-image-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Image"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Image URL"
+                      value={galleryImage}
+                      onChange={(e) => setGalleryImage(e.target.value)}
+                    />
+                  </div>
+                  <Button onClick={addGalleryImage}>Add Image</Button>
+                </div>
+              </Card>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {galleryImages.map((image) => (
+                  <Card key={image.id} className="p-4">
+                    <img
+                      src={image.image_url}
+                      alt={image.title || "Gallery"}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                    {image.title && (
+                      <p className="text-sm font-medium mb-2">{image.title}</p>
+                    )}
+                    <Button
+                      onClick={() => deleteGalleryImage(image.id)}
                       variant="destructive"
                       size="sm"
                       className="w-full"

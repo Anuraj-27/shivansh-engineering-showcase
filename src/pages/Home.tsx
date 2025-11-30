@@ -11,11 +11,13 @@ const Home = () => {
     <div className="min-h-screen">
       <Navigation />
       <PartnersSlider />
-      <CompanyProfile />
-      <Hero />
-      <MachinerySlider />
-      <FeedbackDisplay />
-      <FeedbackForm />
+      <div className="mr-48">
+        <CompanyProfile />
+        <Hero />
+        <MachinerySlider />
+        <FeedbackDisplay />
+        <FeedbackForm />
+      </div>
       
       <footer className="bg-primary text-primary-foreground py-8 mt-20">
         <div className="container mx-auto px-6 text-center">
