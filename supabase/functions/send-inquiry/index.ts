@@ -1,8 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
-const TWILIO_ACCOUNT_SID = Deno.env.get("TWILIO_ACCOUNT_SID");
-const TWILIO_AUTH_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN");
-const TWILIO_WHATSAPP_NUMBER = Deno.env.get("TWILIO_WHATSAPP_NUMBER");
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,46 +25,41 @@ const handler = async (req: Request): Promise<Response> => {
     const inquiryData: InquiryRequest = await req.json();
     const { name, mobile, email, designation, description } = inquiryData;
 
-    // Create WhatsApp message
-    const whatsappMessage = `🔔 New Inquiry from ${name}
+    console.log("Processing inquiry from:", name);
 
-📱 Mobile: ${mobile}
-📧 Email: ${email}
-💼 Designation: ${designation || "Not provided"}
-
-📝 Description:
-${description}`;
-
-    // Send WhatsApp message via Twilio
-    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
-    
-    const formData = new URLSearchParams();
-    formData.append('From', `whatsapp:${TWILIO_WHATSAPP_NUMBER}`);
-    formData.append('To', 'whatsapp:+918888845711');
-    formData.append('Body', whatsappMessage);
-
-    const twilioResponse = await fetch(twilioUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`),
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: formData.toString(),
+    const emailResponse = await resend.emails.send({
+      from: "Shivansh Engineering <onboarding@resend.dev>",
+      to: ["shivanshengineering@yahoo.in"],
+      subject: `New Inquiry from ${name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;">🔔 New Inquiry Received</h2>
+          
+          <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 10px 0;"><strong>👤 Name:</strong> ${name}</p>
+            <p style="margin: 10px 0;"><strong>📱 Mobile:</strong> ${mobile}</p>
+            <p style="margin: 10px 0;"><strong>📧 Email:</strong> ${email}</p>
+            <p style="margin: 10px 0;"><strong>💼 Designation:</strong> ${designation || "Not provided"}</p>
+          </div>
+          
+          <div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            <h3 style="color: #555; margin-top: 0;">📝 Description:</h3>
+            <p style="color: #333; line-height: 1.6;">${description}</p>
+          </div>
+          
+          <p style="color: #888; font-size: 12px; margin-top: 20px;">
+            This inquiry was submitted through the Shivansh Engineering website.
+          </p>
+        </div>
+      `,
     });
 
-    if (!twilioResponse.ok) {
-      const error = await twilioResponse.text();
-      console.error("Twilio error:", error);
-      throw new Error(`WhatsApp sending failed: ${error}`);
-    }
-
-    const twilioResult = await twilioResponse.json();
-    console.log("WhatsApp message sent successfully:", twilioResult);
+    console.log("Email sent successfully:", emailResponse);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: "Inquiry sent to WhatsApp successfully!"
+        message: "Inquiry sent successfully!"
       }),
       {
         status: 200,
