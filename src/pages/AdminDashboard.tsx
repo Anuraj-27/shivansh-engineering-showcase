@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Trash2, Check, X, Upload } from "lucide-react";
+import { Trash2, Check, X, Upload, UserPlus, Shield } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -35,6 +35,11 @@ const AdminDashboard = () => {
   // Gallery form
   const [galleryImage, setGalleryImage] = useState("");
   const [galleryTitle, setGalleryTitle] = useState("");
+
+  // Admin form
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [creatingAdmin, setCreatingAdmin] = useState(false);
 
   // File upload states
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -278,6 +283,42 @@ const AdminDashboard = () => {
     }
   };
 
+  const createNewAdmin = async () => {
+    if (!newAdminEmail || !newAdminPassword) {
+      toast.error("Please fill in email and password");
+      return;
+    }
+
+    if (newAdminPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    setCreatingAdmin(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const response = await supabase.functions.invoke("create-admin", {
+        body: { email: newAdminEmail, password: newAdminPassword },
+      });
+
+      if (response.error) {
+        toast.error(response.error.message || "Failed to create admin");
+      } else if (response.data?.error) {
+        toast.error(response.data.error);
+      } else {
+        toast.success("Admin account created successfully");
+        setNewAdminEmail("");
+        setNewAdminPassword("");
+      }
+    } catch (error: any) {
+      toast.error("Failed to create admin: " + error.message);
+    } finally {
+      setCreatingAdmin(false);
+    }
+  };
+
   const deleteGalleryImage = async (id: string) => {
     const { error } = await supabase.from("gallery_images").delete().eq("id", id);
     if (error) {
@@ -316,12 +357,13 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
+            <TabsList className="grid w-full grid-cols-6 mb-8">
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
               <TabsTrigger value="gallery">Gallery</TabsTrigger>
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              <TabsTrigger value="admins">Admins</TabsTrigger>
             </TabsList>
 
             <TabsContent value="products" className="space-y-8">
@@ -602,6 +644,48 @@ const AdminDashboard = () => {
                   <p className="text-muted-foreground">{item.message}</p>
                 </Card>
               ))}
+            </TabsContent>
+
+            <TabsContent value="admins" className="space-y-8">
+              <Card className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Shield className="w-6 h-6 text-primary" />
+                  <h2 className="text-2xl font-bold">Create New Admin</h2>
+                </div>
+                <p className="text-muted-foreground mb-6">
+                  Only existing admins can create new admin accounts. Share the login credentials securely with the new admin.
+                </p>
+                <div className="grid gap-4 max-w-md">
+                  <Input
+                    type="email"
+                    placeholder="Email address"
+                    value={newAdminEmail}
+                    onChange={(e) => setNewAdminEmail(e.target.value)}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Password (min 6 characters)"
+                    value={newAdminPassword}
+                    onChange={(e) => setNewAdminPassword(e.target.value)}
+                  />
+                  <Button 
+                    onClick={createNewAdmin} 
+                    disabled={creatingAdmin}
+                    className="w-fit"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    {creatingAdmin ? "Creating..." : "Create Admin Account"}
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-2">Security Note</h3>
+                <p className="text-sm text-muted-foreground">
+                  Admin accounts have full access to manage products, partners, gallery, feedback, and create other admins. 
+                  Only create accounts for trusted team members.
+                </p>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>
