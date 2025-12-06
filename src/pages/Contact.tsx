@@ -29,7 +29,7 @@ const Contact = () => {
 
       if (error) throw error;
 
-      toast.success("Inquiry sent to WhatsApp successfully!");
+      toast.success("Inquiry sent successfully! We'll get back to you soon.");
       setFormData({
         name: "",
         mobile: "",
