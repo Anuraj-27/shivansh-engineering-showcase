@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface GalleryImage {
+interface MachineryImage {
   id: string;
   image_url: string;
-  title: string | null;
-  display_order: number | null;
+  display_order: number;
 }
 
 const MachinerySlider = () => {
-  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [images, setImages] = useState<MachineryImage[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -29,12 +28,12 @@ const MachinerySlider = () => {
 
   const fetchImages = async () => {
     const { data, error } = await supabase
-      .from("gallery_images")
+      .from("machinery_images")
       .select("*")
       .order("display_order", { ascending: true });
 
     if (error) {
-      console.error("Error fetching gallery images:", error);
+      console.error("Error fetching machinery images:", error);
     } else {
       setImages(data || []);
     }
@@ -46,13 +45,13 @@ const MachinerySlider = () => {
   }
 
   return (
-    <section className="pt-28 pb-16 bg-background overflow-hidden">
+    <section className="py-20 bg-background overflow-hidden">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 animate-fade-up">
-          Our <span className="text-accent">Machinery</span>
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 animate-fade-up">
+          Our <span className="text-primary">Machinery</span>
         </h2>
         
-        <div className="relative h-72 max-w-2xl mx-auto">
+        <div className="relative h-96 max-w-4xl mx-auto">
           <div className="absolute inset-0 flex items-center justify-center">
             {images.map((image, index) => (
               <div
@@ -65,7 +64,7 @@ const MachinerySlider = () => {
               >
                 <img
                   src={image.image_url}
-                  alt={image.title || `Machinery ${index + 1}`}
+                  alt={`Machinery ${index + 1}`}
                   className="w-full h-full object-cover rounded-lg shadow-2xl"
                 />
               </div>
@@ -73,7 +72,7 @@ const MachinerySlider = () => {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 mt-6">
+        <div className="flex justify-center gap-2 mt-8">
           {images.map((_, index) => (
             <button
               key={index}
@@ -81,7 +80,7 @@ const MachinerySlider = () => {
               className={`w-3 h-3 rounded-full transition-all ${
                 index === currentIndex
                   ? "bg-primary w-8"
-                  : "bg-muted/50 hover:bg-muted"
+                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
               }`}
             />
           ))}

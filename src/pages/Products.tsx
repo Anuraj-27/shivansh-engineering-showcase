@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
-import ClientsList from "@/components/ClientsList";
-import PartnersSlider from "@/components/PartnersSlider";
 
 interface Product {
   id: string;
@@ -82,10 +80,6 @@ const Products = () => {
           )}
         </div>
       </div>
-
-      <ClientsList />
-      
-      <PartnersSlider />
 
       <footer className="bg-primary text-primary-foreground py-8">
         <div className="container mx-auto px-6 text-center">
