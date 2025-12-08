@@ -9,60 +9,63 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Industrial Theme - Steel Blue Palette */
-    --background: 207 40% 93%;
-    --foreground: 210 20% 28%;
+    /* Light backgrounds use dark text, dark backgrounds use light text */
+    
+    /* Background - Light Blue #BDDDFC */
+    --background: 207 92% 87%;
+    --foreground: 0 0% 13%; /* #212121 - dark text on light bg */
 
-    --card: 207 60% 99%;
-    --card-foreground: 210 20% 28%;
+    --card: 0 0% 100%; /* white */
+    --card-foreground: 0 0% 13%; /* #212121 */
 
-    --popover: 207 60% 99%;
-    --popover-foreground: 210 20% 28%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
 
     /* Primary - Dark Steel Blue #384959 */
-    --primary: 210 20% 28%;
-    --primary-foreground: 207 60% 99%;
-    --primary-glow: 207 37% 53%;
+    --primary: 210 22% 28%;
+    --primary-foreground: 0 0% 100%; /* white text on dark primary */
+    --primary-glow: 207 37% 53%; /* #6A89A7 */
 
-    /* Secondary - Light Blue #BDDDFC */
-    --secondary: 207 92% 87%;
-    --secondary-foreground: 210 20% 28%;
+    /* Secondary - Light Blue #88BDF2 */
+    --secondary: 207 81% 74%;
+    --secondary-foreground: 0 0% 13%; /* dark text on light secondary */
 
-    /* Muted - Grayish Blue #6A89A7 */
+    /* Muted - Grayish Blue #6A89A7 (darker, needs light text) */
     --muted: 207 24% 53%;
-    --muted-foreground: 207 60% 99%;
+    --muted-foreground: 0 0% 100%; /* white text on muted */
 
     /* Accent - Medium Blue #88BDF2 */
     --accent: 207 81% 74%;
-    --accent-foreground: 210 20% 28%;
+    --accent-foreground: 0 0% 13%; /* dark text on accent */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 207 30% 80%;
+    --border: 207 30% 70%;
     --input: 207 30% 80%;
-    --ring: 210 20% 28%;
+    --ring: 210 22% 28%;
 
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(210 20% 28%), hsl(207 37% 53%));
-    --gradient-hero: linear-gradient(180deg, hsl(210 20% 28%), hsl(207 24% 40%));
+    --gradient-primary: linear-gradient(135deg, hsl(210 22% 28%), hsl(207 37% 53%));
+    --gradient-hero: linear-gradient(180deg, hsl(210 22% 28%), hsl(207 24% 40%));
     --gradient-shine: linear-gradient(90deg, transparent, hsl(207 81% 74% / 0.3), transparent);
 
     /* Shadows */
     --shadow-glow: 0 0 30px hsl(207 37% 53% / 0.3);
-    --shadow-card: 0 4px 20px hsl(210 20% 28% / 0.08);
+    --shadow-card: 0 4px 20px hsl(210 22% 28% / 0.08);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 207 60% 99%;
-    --sidebar-foreground: 210 20% 28%;
-    --sidebar-primary: 210 20% 28%;
-    --sidebar-primary-foreground: 207 60% 99%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 13%;
+    --sidebar-primary: 210 22% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 207 92% 87%;
-    --sidebar-accent-foreground: 210 20% 28%;
-    --sidebar-border: 207 30% 80%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 207 30% 70%;
     --sidebar-ring: 207 37% 53%;
   }
 
