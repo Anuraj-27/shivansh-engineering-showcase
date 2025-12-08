@@ -12,12 +12,12 @@ const Navigation = () => {
             <img 
               src={seLogo} 
               alt="SE Logo" 
-              className="h-14 w-14 object-contain"
+              className="h-18 w-18 object-contain"
             />
             <img 
               src={logo} 
               alt="Shivansh Engineering" 
-              className="h-14 object-contain"
+              className="h-12 object-contain"
             />
           </Link>
           
