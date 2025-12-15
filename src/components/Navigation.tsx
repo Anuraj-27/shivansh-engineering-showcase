@@ -8,19 +8,19 @@ const Navigation = () => {
 <nav className="fixed top-0 left-0 right-0 z-50 bg-navbar border-b border-navbar">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-1">
-            <div className="h-14 flex items-center justify-center bg-navbar rounded px-2">
+          <Link to="/" className="flex items-center gap-0">
+            <div className="h-16 flex items-center justify-center bg-navbar rounded px-1">
               <img 
                 src={logo1} 
                 alt="SE Logo" 
-                className="h-10 object-contain"
+                className="h-14 object-contain"
               />
             </div>
-            <div className="h-14 flex items-center justify-center bg-navbar rounded px-2">
+            <div className="h-16 flex items-center justify-center bg-navbar rounded px-1">
               <img 
                 src={logo2} 
                 alt="Shivansh Engineering" 
-                className="h-10 object-contain"
+                className="h-14 object-contain"
               />
             </div>
           </Link>
