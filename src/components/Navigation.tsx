@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import seLogo from "@/assets/se-logo.png";
-import logo from "@/assets/shivansh-engineering-logo.png";
+import logo1 from "@/assets/logo1.png";
+import logo2 from "@/assets/logo2.png";
 
 const Navigation = () => {
   return (
@@ -9,18 +9,18 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-1">
-            <div className="h-14 w-14 flex items-center justify-center bg-navbar rounded">
+            <div className="h-14 flex items-center justify-center bg-navbar rounded px-2">
               <img 
-                src={seLogo} 
+                src={logo1} 
                 alt="SE Logo" 
-                className="h-12 object-contain"
+                className="h-10 object-contain"
               />
             </div>
             <div className="h-14 flex items-center justify-center bg-navbar rounded px-2">
               <img 
-                src={logo} 
+                src={logo2} 
                 alt="Shivansh Engineering" 
-                className="h-12 object-contain"
+                className="h-10 object-contain"
               />
             </div>
           </Link>
