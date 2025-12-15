@@ -14,6 +14,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [partners, setPartners] = useState<any[]>([]);
+  const [clients, setClients] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
   const [machineryImages, setMachineryImages] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
@@ -28,6 +29,9 @@ const AdminDashboard = () => {
   // Partner form
   const [partnerName, setPartnerName] = useState("");
   const [partnerLogo, setPartnerLogo] = useState("");
+
+  // Client form
+  const [clientName, setClientName] = useState("");
 
   // Machinery form
   const [machineryImage, setMachineryImage] = useState("");
@@ -120,12 +124,14 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     const { data: productsData } = await supabase.from("products").select("*").order("created_at", { ascending: false });
     const { data: partnersData } = await supabase.from("partners").select("*").order("display_order", { ascending: true });
+    const { data: clientsData } = await supabase.from("clients").select("*").order("display_order", { ascending: true });
     const { data: feedbackData } = await supabase.from("feedback").select("*").order("created_at", { ascending: false });
     const { data: machineryData } = await supabase.from("machinery_images").select("*").order("display_order", { ascending: true });
     const { data: galleryData } = await supabase.from("gallery_images").select("*").order("display_order", { ascending: true });
 
     setProducts(productsData || []);
     setPartners(partnersData || []);
+    setClients(clientsData || []);
     setFeedback(feedbackData || []);
     setMachineryImages(machineryData || []);
     setGalleryImages(galleryData || []);
@@ -203,6 +209,35 @@ const AdminDashboard = () => {
       toast.error("Failed to delete partner");
     } else {
       toast.success("Partner deleted");
+      fetchData();
+    }
+  };
+
+  const addClient = async () => {
+    if (!clientName) {
+      toast.error("Please enter client name");
+      return;
+    }
+
+    const { error } = await supabase.from("clients").insert([
+      { name: clientName },
+    ]);
+
+    if (error) {
+      toast.error("Failed to add client: " + error.message);
+    } else {
+      toast.success("Client added successfully");
+      setClientName("");
+      fetchData();
+    }
+  };
+
+  const deleteClient = async (id: string) => {
+    const { error } = await supabase.from("clients").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete client");
+    } else {
+      toast.success("Client deleted");
       fetchData();
     }
   };
@@ -357,9 +392,10 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-6 mb-8">
+            <TabsList className="grid w-full grid-cols-7 mb-8">
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
+              <TabsTrigger value="clients">Clients</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
               <TabsTrigger value="gallery">Gallery</TabsTrigger>
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
@@ -473,6 +509,36 @@ const AdminDashboard = () => {
                     <h3 className="text-xl font-bold mb-4">{partner.name}</h3>
                     <Button
                       onClick={() => deletePartner(partner.id)}
+                      variant="destructive"
+                      size="sm"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="clients" className="space-y-8">
+              <Card className="p-6">
+                <h2 className="text-2xl font-bold mb-4">Add New Client</h2>
+                <div className="grid gap-4">
+                  <Input
+                    placeholder="Client Name"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                  />
+                  <Button onClick={addClient}>Add Client</Button>
+                </div>
+              </Card>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {clients.map((client) => (
+                  <Card key={client.id} className="p-6">
+                    <h3 className="text-xl font-bold mb-4">{client.name}</h3>
+                    <Button
+                      onClick={() => deleteClient(client.id)}
                       variant="destructive"
                       size="sm"
                     >
