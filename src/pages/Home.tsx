@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import PartnersSlider from "@/components/PartnersSlider";
 import CompanyProfile from "@/components/CompanyProfile";
-import MachinerySlider from "@/components/MachinerySlider";
+import GallerySlider from "@/components/GallerySlider";
 import FeedbackDisplay from "@/components/FeedbackDisplay";
 import FeedbackForm from "@/components/FeedbackForm";
 
@@ -10,10 +10,9 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <PartnersSlider />
+      <GallerySlider />
       <CompanyProfile />
       <Hero />
-      <MachinerySlider />
       <FeedbackDisplay />
       <FeedbackForm />
       
