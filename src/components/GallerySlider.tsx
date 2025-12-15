@@ -52,7 +52,7 @@ const GallerySlider = () => {
           Our <span className="text-primary">Machinery</span>
         </h2>
         
-        <div className="relative h-72 max-w-3xl mx-auto">
+        <div className="relative h-96 max-w-4xl mx-auto">
           <div className="absolute inset-0 flex items-center justify-center">
             {images.map((image, index) => (
               <div
