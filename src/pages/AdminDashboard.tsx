@@ -59,6 +59,7 @@ const AdminDashboard = () => {
   const [newParamName, setNewParamName] = useState("");
   const [newParamMin, setNewParamMin] = useState("0");
   const [newParamMax, setNewParamMax] = useState("0");
+  const [newParamUnit, setNewParamUnit] = useState("mm");
 
   // Equipment form
   const [eqName, setEqName] = useState("");
@@ -74,6 +75,7 @@ const AdminDashboard = () => {
   const [newEqParamName, setNewEqParamName] = useState("");
   const [newEqParamMin, setNewEqParamMin] = useState("0");
   const [newEqParamMax, setNewEqParamMax] = useState("0");
+  const [newEqParamUnit, setNewEqParamUnit] = useState("mm");
 
   // File upload states
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -504,6 +506,7 @@ const AdminDashboard = () => {
         parameter_name: newParamName,
         min_value: parseFloat(newParamMin) || 0,
         max_value: parseFloat(newParamMax) || 0,
+        unit: newParamUnit || "mm",
       },
     ]);
 
@@ -515,6 +518,7 @@ const AdminDashboard = () => {
       setNewParamName("");
       setNewParamMin("0");
       setNewParamMax("0");
+      setNewParamUnit("mm");
       fetchProcessingLineProducts();
     }
   };
@@ -596,6 +600,7 @@ const AdminDashboard = () => {
         parameter_name: newEqParamName,
         min_value: parseFloat(newEqParamMin) || 0,
         max_value: parseFloat(newEqParamMax) || 0,
+        unit: newEqParamUnit || "mm",
       },
     ]);
 
@@ -607,6 +612,7 @@ const AdminDashboard = () => {
       setNewEqParamName("");
       setNewEqParamMin("0");
       setNewEqParamMax("0");
+      setNewEqParamUnit("mm");
       fetchEquipments();
     }
   };
@@ -1123,6 +1129,7 @@ const AdminDashboard = () => {
                                 <th className="px-4 py-2 text-left font-semibold">Parameter</th>
                                 <th className="px-4 py-2 text-center font-semibold">Min</th>
                                 <th className="px-4 py-2 text-center font-semibold">Max</th>
+                                <th className="px-4 py-2 text-center font-semibold">Unit</th>
                                 <th className="px-4 py-2 text-center font-semibold w-16">Action</th>
                               </tr>
                             </thead>
@@ -1133,6 +1140,7 @@ const AdminDashboard = () => {
                                     <td className="px-4 py-2">{param.parameter_name}</td>
                                     <td className="px-4 py-2 text-center">{param.min_value}</td>
                                     <td className="px-4 py-2 text-center">{param.max_value}</td>
+                                    <td className="px-4 py-2 text-center">{param.unit}</td>
                                     <td className="px-4 py-2 text-center">
                                       <Button
                                         size="sm"
@@ -1147,7 +1155,7 @@ const AdminDashboard = () => {
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan={4} className="px-4 py-4 text-center text-muted-foreground">
+                                  <td colSpan={5} className="px-4 py-4 text-center text-muted-foreground">
                                     No parameters added yet
                                   </td>
                                 </tr>
@@ -1179,6 +1187,12 @@ const AdminDashboard = () => {
                               onChange={(e) => setNewParamMax(e.target.value)}
                               className="w-20"
                             />
+                            <Input
+                              placeholder="Unit"
+                              value={newParamUnit}
+                              onChange={(e) => setNewParamUnit(e.target.value)}
+                              className="w-20"
+                            />
                             <Button size="sm" onClick={() => addParameter(product.id)}>
                               Add
                             </Button>
@@ -1190,6 +1204,7 @@ const AdminDashboard = () => {
                                 setNewParamName("");
                                 setNewParamMin("0");
                                 setNewParamMax("0");
+                                setNewParamUnit("mm");
                               }}
                             >
                               Cancel
@@ -1388,6 +1403,7 @@ const AdminDashboard = () => {
                                 <th className="px-4 py-2 text-left font-semibold">Parameter</th>
                                 <th className="px-4 py-2 text-center font-semibold">Min</th>
                                 <th className="px-4 py-2 text-center font-semibold">Max</th>
+                                <th className="px-4 py-2 text-center font-semibold">Unit</th>
                                 <th className="px-4 py-2 text-center font-semibold w-16">Action</th>
                               </tr>
                             </thead>
@@ -1398,6 +1414,7 @@ const AdminDashboard = () => {
                                     <td className="px-4 py-2">{param.parameter_name}</td>
                                     <td className="px-4 py-2 text-center">{param.min_value}</td>
                                     <td className="px-4 py-2 text-center">{param.max_value}</td>
+                                    <td className="px-4 py-2 text-center">{param.unit}</td>
                                     <td className="px-4 py-2 text-center">
                                       <Button
                                         size="sm"
@@ -1412,7 +1429,7 @@ const AdminDashboard = () => {
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan={4} className="px-4 py-4 text-center text-muted-foreground">
+                                  <td colSpan={5} className="px-4 py-4 text-center text-muted-foreground">
                                     No parameters added yet
                                   </td>
                                 </tr>
@@ -1444,6 +1461,12 @@ const AdminDashboard = () => {
                               onChange={(e) => setNewEqParamMax(e.target.value)}
                               className="w-20"
                             />
+                            <Input
+                              placeholder="Unit"
+                              value={newEqParamUnit}
+                              onChange={(e) => setNewEqParamUnit(e.target.value)}
+                              className="w-20"
+                            />
                             <Button size="sm" onClick={() => addEquipmentParameter(equipment.id)}>
                               Add
                             </Button>
@@ -1455,6 +1478,7 @@ const AdminDashboard = () => {
                                 setNewEqParamName("");
                                 setNewEqParamMin("0");
                                 setNewEqParamMax("0");
+                                setNewEqParamUnit("mm");
                               }}
                             >
                               Cancel

@@ -44,6 +44,7 @@ export type Database = {
           max_value: number
           min_value: number
           parameter_name: string
+          unit: string
         }
         Insert: {
           created_at?: string
@@ -53,6 +54,7 @@ export type Database = {
           max_value?: number
           min_value?: number
           parameter_name?: string
+          unit?: string
         }
         Update: {
           created_at?: string
@@ -62,6 +64,7 @@ export type Database = {
           max_value?: number
           min_value?: number
           parameter_name?: string
+          unit?: string
         }
         Relationships: [
           {
@@ -229,6 +232,7 @@ export type Database = {
           min_value: number
           parameter_name: string
           product_id: string
+          unit: string
         }
         Insert: {
           created_at?: string
@@ -238,6 +242,7 @@ export type Database = {
           min_value?: number
           parameter_name?: string
           product_id: string
+          unit?: string
         }
         Update: {
           created_at?: string
@@ -247,6 +252,7 @@ export type Database = {
           min_value?: number
           parameter_name?: string
           product_id?: string
+          unit?: string
         }
         Relationships: [
           {
