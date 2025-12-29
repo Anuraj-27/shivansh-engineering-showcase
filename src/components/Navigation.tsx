@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logo1 from "@/assets/logo1.png";
 import logo2 from "@/assets/logo2.png";
 
 const Navigation = () => {
   return (
-<nav className="fixed top-0 left-0 right-0 z-50 bg-navbar border-b border-navbar">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-navbar border-b border-navbar">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-0">
@@ -31,11 +38,22 @@ const Navigation = () => {
                 About Us
               </Button>
             </Link>
-            <Link to="/products">
-              <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors">
-                Products
-              </Button>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors gap-1">
+                  Products
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="bg-navbar border-navbar min-w-[160px]">
+                <DropdownMenuItem asChild className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground">
+                  <Link to="/processing-line" className="w-full">Processing Line</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground">
+                  <Link to="/equipments" className="w-full">Equipments</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link to="/contact">
               <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors">
                 Contact Us
