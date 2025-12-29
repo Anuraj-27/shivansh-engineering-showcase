@@ -152,6 +152,71 @@ export type Database = {
         }
         Relationships: []
       }
+      processing_line_parameters: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          max_value: number
+          min_value: number
+          parameter_name: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          max_value?: number
+          min_value?: number
+          parameter_name?: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          max_value?: number
+          min_value?: number
+          parameter_name?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processing_line_parameters_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "processing_line_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      processing_line_products: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           created_at: string
