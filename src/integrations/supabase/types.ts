@@ -35,6 +35,74 @@ export type Database = {
         }
         Relationships: []
       }
+      equipment_parameters: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          equipment_id: string
+          id: string
+          max_value: number
+          min_value: number
+          parameter_name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          equipment_id: string
+          id?: string
+          max_value?: number
+          min_value?: number
+          parameter_name?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          equipment_id?: string
+          id?: string
+          max_value?: number
+          min_value?: number
+          parameter_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_parameters_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipments: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          material: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          material?: string
+          name?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          material?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           created_at: string

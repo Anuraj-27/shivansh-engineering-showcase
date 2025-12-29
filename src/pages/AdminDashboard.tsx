@@ -19,6 +19,7 @@ const AdminDashboard = () => {
   const [machineryImages, setMachineryImages] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [processingLineProducts, setProcessingLineProducts] = useState<any[]>([]);
+  const [equipments, setEquipments] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -58,6 +59,21 @@ const AdminDashboard = () => {
   const [newParamName, setNewParamName] = useState("");
   const [newParamMin, setNewParamMin] = useState("0");
   const [newParamMax, setNewParamMax] = useState("0");
+
+  // Equipment form
+  const [eqName, setEqName] = useState("");
+  const [eqImage, setEqImage] = useState("");
+  const [eqMaterial, setEqMaterial] = useState("0");
+  const [editingEquipment, setEditingEquipment] = useState<string | null>(null);
+  const [editEqName, setEditEqName] = useState("");
+  const [editEqImage, setEditEqImage] = useState("");
+  const [editEqMaterial, setEditEqMaterial] = useState("");
+  
+  // Equipment parameter form
+  const [newEqParamEquipmentId, setNewEqParamEquipmentId] = useState<string | null>(null);
+  const [newEqParamName, setNewEqParamName] = useState("");
+  const [newEqParamMin, setNewEqParamMin] = useState("0");
+  const [newEqParamMax, setNewEqParamMax] = useState("0");
 
   // File upload states
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -152,6 +168,9 @@ const AdminDashboard = () => {
     
     // Fetch processing line products with parameters
     await fetchProcessingLineProducts();
+    
+    // Fetch equipments with parameters
+    await fetchEquipments();
   };
 
   const fetchProcessingLineProducts = async () => {
@@ -172,6 +191,26 @@ const AdminDashboard = () => {
     );
 
     setProcessingLineProducts(productsWithParams);
+  };
+
+  const fetchEquipments = async () => {
+    const { data: eqData } = await supabase
+      .from("equipments")
+      .select("*")
+      .order("display_order", { ascending: true });
+
+    const equipmentsWithParams = await Promise.all(
+      (eqData || []).map(async (equipment) => {
+        const { data: params } = await supabase
+          .from("equipment_parameters")
+          .select("*")
+          .eq("equipment_id", equipment.id)
+          .order("display_order", { ascending: true });
+        return { ...equipment, parameters: params || [] };
+      })
+    );
+
+    setEquipments(equipmentsWithParams);
   };
 
   const handleLogout = async () => {
@@ -490,6 +529,98 @@ const AdminDashboard = () => {
     }
   };
 
+  // Equipment functions
+  const addEquipment = async () => {
+    if (!eqName) {
+      toast.error("Please enter equipment name");
+      return;
+    }
+
+    const { error } = await supabase.from("equipments").insert([
+      {
+        name: eqName,
+        image_url: eqImage || null,
+        material: eqMaterial || "0",
+      },
+    ]);
+
+    if (error) {
+      toast.error("Failed to add equipment: " + error.message);
+    } else {
+      toast.success("Equipment added successfully");
+      setEqName("");
+      setEqImage("");
+      setEqMaterial("0");
+      fetchEquipments();
+    }
+  };
+
+  const updateEquipment = async (id: string) => {
+    const { error } = await supabase
+      .from("equipments")
+      .update({
+        name: editEqName,
+        image_url: editEqImage || null,
+        material: editEqMaterial,
+      })
+      .eq("id", id);
+
+    if (error) {
+      toast.error("Failed to update equipment");
+    } else {
+      toast.success("Equipment updated");
+      setEditingEquipment(null);
+      fetchEquipments();
+    }
+  };
+
+  const deleteEquipment = async (id: string) => {
+    const { error } = await supabase.from("equipments").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete equipment");
+    } else {
+      toast.success("Equipment deleted");
+      fetchEquipments();
+    }
+  };
+
+  const addEquipmentParameter = async (equipmentId: string) => {
+    if (!newEqParamName) {
+      toast.error("Please enter parameter name");
+      return;
+    }
+
+    const { error } = await supabase.from("equipment_parameters").insert([
+      {
+        equipment_id: equipmentId,
+        parameter_name: newEqParamName,
+        min_value: parseFloat(newEqParamMin) || 0,
+        max_value: parseFloat(newEqParamMax) || 0,
+      },
+    ]);
+
+    if (error) {
+      toast.error("Failed to add parameter: " + error.message);
+    } else {
+      toast.success("Parameter added");
+      setNewEqParamEquipmentId(null);
+      setNewEqParamName("");
+      setNewEqParamMin("0");
+      setNewEqParamMax("0");
+      fetchEquipments();
+    }
+  };
+
+  const deleteEquipmentParameter = async (id: string) => {
+    const { error } = await supabase.from("equipment_parameters").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete parameter");
+    } else {
+      toast.success("Parameter deleted");
+      fetchEquipments();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -518,9 +649,10 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-8 mb-8">
+            <TabsList className="grid w-full grid-cols-9 mb-8">
               <TabsTrigger value="products">Products</TabsTrigger>
               <TabsTrigger value="processing-line">Processing Line</TabsTrigger>
+              <TabsTrigger value="equipments">Equipments</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="clients">Clients</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
@@ -1081,6 +1213,271 @@ const AdminDashboard = () => {
                 {processingLineProducts.length === 0 && (
                   <p className="text-center text-muted-foreground py-8">
                     No processing line products yet. Add your first product above.
+                  </p>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="equipments" className="space-y-8">
+              <Card className="p-6">
+                <h2 className="text-2xl font-bold mb-4">Add Equipment</h2>
+                <div className="grid gap-4">
+                  <Input
+                    placeholder="Equipment Name"
+                    value={eqName}
+                    onChange={(e) => setEqName(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Material"
+                    value={eqMaterial}
+                    onChange={(e) => setEqMaterial(e.target.value)}
+                  />
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileUpload(e, setEqImage)}
+                        className="hidden"
+                        id="eq-image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('eq-image-upload')?.click()}
+                        disabled={uploadingFile}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingFile ? "Uploading..." : "Browse Image"}
+                      </Button>
+                    </label>
+                    <Input
+                      placeholder="Or paste Image URL"
+                      value={eqImage}
+                      onChange={(e) => setEqImage(e.target.value)}
+                    />
+                  </div>
+                  <Button onClick={addEquipment}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Equipment
+                  </Button>
+                </div>
+              </Card>
+
+              <div className="space-y-6">
+                {equipments.map((equipment) => (
+                  <Card key={equipment.id} className="p-6">
+                    <div className="grid md:grid-cols-[200px_1fr] gap-6">
+                      {/* Equipment Image, Name & Material */}
+                      <div className="flex flex-col items-center">
+                        <div className="w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
+                          {editingEquipment === equipment.id ? (
+                            <div className="p-2 space-y-2 h-full flex flex-col justify-center">
+                              <Input
+                                placeholder="Image URL"
+                                value={editEqImage}
+                                onChange={(e) => setEditEqImage(e.target.value)}
+                                className="text-xs"
+                              />
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handleFileUpload(e, setEditEqImage)}
+                                  className="hidden"
+                                  id={`edit-eq-image-${equipment.id}`}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => document.getElementById(`edit-eq-image-${equipment.id}`)?.click()}
+                                  disabled={uploadingFile}
+                                  className="w-full"
+                                >
+                                  <Upload className="w-3 h-3 mr-1" />
+                                  {uploadingFile ? "..." : "Browse"}
+                                </Button>
+                              </label>
+                            </div>
+                          ) : equipment.image_url ? (
+                            <img
+                              src={equipment.image_url}
+                              alt={equipment.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                              No Image
+                            </div>
+                          )}
+                        </div>
+                        {editingEquipment === equipment.id ? (
+                          <div className="space-y-2 w-full">
+                            <Input
+                              value={editEqName}
+                              onChange={(e) => setEditEqName(e.target.value)}
+                              placeholder="Equipment Name"
+                              className="text-center"
+                            />
+                            <Input
+                              value={editEqMaterial}
+                              onChange={(e) => setEditEqMaterial(e.target.value)}
+                              placeholder="Material"
+                              className="text-center"
+                            />
+                          </div>
+                        ) : (
+                          <div className="text-center">
+                            <h3 className="text-lg font-bold">{equipment.name}</h3>
+                            <p className="text-sm text-muted-foreground">Material: {equipment.material}</p>
+                          </div>
+                        )}
+                        <div className="flex gap-2 mt-4">
+                          {editingEquipment === equipment.id ? (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => updateEquipment(equipment.id)}
+                              >
+                                <Save className="w-4 h-4 mr-1" />
+                                Save
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditingEquipment(null)}
+                              >
+                                Cancel
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setEditingEquipment(equipment.id);
+                                  setEditEqName(equipment.name);
+                                  setEditEqImage(equipment.image_url || "");
+                                  setEditEqMaterial(equipment.material);
+                                }}
+                              >
+                                <Edit className="w-4 h-4 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => deleteEquipment(equipment.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Parameters Table */}
+                      <div>
+                        <h4 className="text-lg font-semibold mb-4">Range Parameters</h4>
+                        <div className="border rounded-lg overflow-hidden mb-4">
+                          <table className="w-full">
+                            <thead className="bg-muted/50">
+                              <tr>
+                                <th className="px-4 py-2 text-left font-semibold">Parameter</th>
+                                <th className="px-4 py-2 text-center font-semibold">Min</th>
+                                <th className="px-4 py-2 text-center font-semibold">Max</th>
+                                <th className="px-4 py-2 text-center font-semibold w-16">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {equipment.parameters.length > 0 ? (
+                                equipment.parameters.map((param: any) => (
+                                  <tr key={param.id} className="border-t">
+                                    <td className="px-4 py-2">{param.parameter_name}</td>
+                                    <td className="px-4 py-2 text-center">{param.min_value}</td>
+                                    <td className="px-4 py-2 text-center">{param.max_value}</td>
+                                    <td className="px-4 py-2 text-center">
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => deleteEquipmentParameter(param.id)}
+                                        className="text-destructive hover:text-destructive"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={4} className="px-4 py-4 text-center text-muted-foreground">
+                                    No parameters added yet
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Add Parameter Form */}
+                        {newEqParamEquipmentId === equipment.id ? (
+                          <div className="flex flex-wrap gap-2 items-end">
+                            <Input
+                              placeholder="Parameter Name"
+                              value={newEqParamName}
+                              onChange={(e) => setNewEqParamName(e.target.value)}
+                              className="flex-1 min-w-[150px]"
+                            />
+                            <Input
+                              placeholder="Min"
+                              type="number"
+                              value={newEqParamMin}
+                              onChange={(e) => setNewEqParamMin(e.target.value)}
+                              className="w-20"
+                            />
+                            <Input
+                              placeholder="Max"
+                              type="number"
+                              value={newEqParamMax}
+                              onChange={(e) => setNewEqParamMax(e.target.value)}
+                              className="w-20"
+                            />
+                            <Button size="sm" onClick={() => addEquipmentParameter(equipment.id)}>
+                              Add
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setNewEqParamEquipmentId(null);
+                                setNewEqParamName("");
+                                setNewEqParamMin("0");
+                                setNewEqParamMax("0");
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setNewEqParamEquipmentId(equipment.id)}
+                          >
+                            <Plus className="w-4 h-4 mr-1" />
+                            Add Parameter
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+
+                {equipments.length === 0 && (
+                  <p className="text-center text-muted-foreground py-8">
+                    No equipments yet. Add your first equipment above.
                   </p>
                 )}
               </div>
