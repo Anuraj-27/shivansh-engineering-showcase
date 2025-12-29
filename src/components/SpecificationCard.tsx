@@ -26,10 +26,10 @@ interface SpecificationCardProps {
 const SpecificationCard = ({ name, imageUrl, material, parameters }: SpecificationCardProps) => {
   return (
     <Card className="overflow-hidden border-border/50">
-      <div className="grid md:grid-cols-[1fr_1.5fr] gap-0">
+      <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12 p-6">
         {/* Left Side: Image and Name */}
-        <div className="flex flex-col bg-muted/20 p-6 border-b md:border-b-0 md:border-r border-border/50">
-          <div className="flex-1 flex items-center justify-center">
+        <div className="flex flex-col items-center flex-1">
+          <div className="flex items-center justify-center">
             {imageUrl ? (
               <img
                 src={imageUrl}
@@ -37,7 +37,7 @@ const SpecificationCard = ({ name, imageUrl, material, parameters }: Specificati
                 className="max-w-full max-h-[300px] object-contain rounded-lg"
               />
             ) : (
-              <div className="w-full h-[200px] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
+              <div className="w-64 h-[200px] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
                 No Image
               </div>
             )}
@@ -46,7 +46,7 @@ const SpecificationCard = ({ name, imageUrl, material, parameters }: Specificati
         </div>
 
         {/* Right Side: Specification Table */}
-        <div className="p-6">
+        <div className="shrink-0 md:max-w-sm">
           <h4 className="text-lg font-semibold mb-4 text-primary border-b border-primary/20 pb-2">
             Specification
           </h4>
