@@ -54,6 +54,11 @@ const Navigation = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <Link to="/services">
+              <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors">
+                Services
+              </Button>
+            </Link>
             <Link to="/contact">
               <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 transition-colors">
                 Contact Us
