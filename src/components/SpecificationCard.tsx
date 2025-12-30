@@ -26,9 +26,10 @@ interface SpecificationCardProps {
 const SpecificationCard = ({ name, imageUrl, material, parameters }: SpecificationCardProps) => {
   return (
     <Card className="overflow-hidden border-border/50">
-      <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-12 p-6">
-        {/* Left Side: Image and Name */}
+      <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12 p-6">
+        {/* Left Side: Image with Heading */}
         <div className="flex flex-col items-center flex-1">
+          <h3 className="text-xl font-semibold text-center mb-4 text-foreground">{name}</h3>
           <div className="flex items-center justify-center">
             {imageUrl ? (
               <img
@@ -42,12 +43,12 @@ const SpecificationCard = ({ name, imageUrl, material, parameters }: Specificati
               </div>
             )}
           </div>
-          <h3 className="text-xl font-bold text-center mt-4 text-foreground">{name}</h3>
         </div>
 
-        {/* Right Side: Specification Table */}
+        {/* Right Side: Specification Table with Heading */}
         <div className="shrink-0 md:max-w-sm">
-          <h4 className="text-lg font-semibold mb-4 text-primary border-b border-primary/20 pb-2">
+          <h3 className="text-xl font-semibold mb-4 text-foreground">{name}</h3>
+          <h4 className="text-lg font-medium mb-3 text-primary border-b border-primary/20 pb-2">
             Specification
           </h4>
           <div className="overflow-x-auto">
