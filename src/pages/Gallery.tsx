@@ -63,7 +63,7 @@ const Gallery = () => {
                   <img
                     src={image.image_url}
                     alt={image.title || "Gallery image"}
-                    className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                   {image.title && (
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">

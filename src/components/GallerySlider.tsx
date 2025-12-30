@@ -52,21 +52,21 @@ const GallerySlider = () => {
           Our <span className="text-primary">Machinery</span>
         </h2>
         
-        <div className="relative h-96 max-w-4xl mx-auto">
-          <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative max-w-4xl mx-auto">
+          <div className="flex items-center justify-center">
             {images.map((image, index) => (
               <div
                 key={image.id}
-                className={`absolute w-full h-full transition-all duration-1000 ease-in-out ${
+                className={`w-full transition-all duration-1000 ease-in-out ${
                   index === currentIndex
-                    ? "opacity-100 scale-100"
-                    : "opacity-0 scale-95"
+                    ? "opacity-100 scale-100 block"
+                    : "opacity-0 scale-95 hidden"
                 }`}
               >
                 <img
                   src={image.image_url}
                   alt={image.title || `Machinery ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-2xl"
+                  className="w-full h-auto max-w-full object-contain rounded-lg shadow-2xl"
                 />
               </div>
             ))}

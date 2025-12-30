@@ -1,10 +1,7 @@
 import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
 import PartnersSlider from "@/components/PartnersSlider";
 import CompanyProfile from "@/components/CompanyProfile";
 import GallerySlider from "@/components/GallerySlider";
-import FeedbackDisplay from "@/components/FeedbackDisplay";
-import FeedbackForm from "@/components/FeedbackForm";
 
 const Home = () => {
   return (
@@ -12,9 +9,6 @@ const Home = () => {
       <Navigation />
       <GallerySlider />
       <CompanyProfile />
-      <Hero />
-      <FeedbackDisplay />
-      <FeedbackForm />
       
       <footer className="bg-primary text-primary-foreground py-8 mt-20">
         <div className="container mx-auto px-6 text-center">
