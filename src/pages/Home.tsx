@@ -1,13 +1,13 @@
 import Navigation from "@/components/Navigation";
 import PartnersSlider from "@/components/PartnersSlider";
 import CompanyProfile from "@/components/CompanyProfile";
-import GallerySlider from "@/components/GallerySlider";
+import MachinerySlider from "@/components/MachinerySlider";
 
 const Home = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <GallerySlider />
+      <MachinerySlider />
       <CompanyProfile />
       
       <footer className="bg-primary text-primary-foreground py-8 mt-20">
