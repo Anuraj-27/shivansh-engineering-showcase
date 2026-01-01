@@ -56,7 +56,7 @@ const MachinerySlider = () => {
             {images.map((image, index) => (
               <div
                 key={image.id}
-                className={`absolute w-full h-full transition-all duration-1000 ease-in-out ${
+                className={`absolute w-full h-full flex items-center justify-center transition-all duration-1000 ease-in-out ${
                   index === currentIndex
                     ? "opacity-100 scale-100"
                     : "opacity-0 scale-95"
@@ -65,7 +65,7 @@ const MachinerySlider = () => {
                 <img
                   src={image.image_url}
                   alt={`Machinery ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-2xl"
+                  className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                 />
               </div>
             ))}
