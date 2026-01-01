@@ -152,6 +152,7 @@ const AdminDashboard = () => {
     setClients(clientsData || []);
     setFeedback(feedbackData || []);
     setMachineryImages(machineryData || []);
+    setGalleryImages(galleryData || []);
     
     // Fetch equipments with parameters
     await fetchEquipments();
@@ -725,7 +726,7 @@ const AdminDashboard = () => {
                     <img
                       src={image.image_url}
                       alt="Machinery"
-                      className="w-full h-48 object-cover rounded-lg mb-4"
+                      className="w-full h-48 object-contain rounded-lg mb-4"
                     />
                     <Button
                       onClick={() => deleteMachineryImage(image.id)}
@@ -785,7 +786,7 @@ const AdminDashboard = () => {
                     <img
                       src={image.image_url}
                       alt={image.title || "Gallery"}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
+                      className="w-full h-48 object-contain rounded-lg mb-4"
                     />
                     {image.title && (
                       <p className="text-sm font-medium mb-2">{image.title}</p>
@@ -938,7 +939,7 @@ const AdminDashboard = () => {
                             <img
                               src={equipment.image_url}
                               alt={equipment.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-contain"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
