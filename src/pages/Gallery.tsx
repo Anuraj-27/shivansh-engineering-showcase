@@ -53,23 +53,23 @@ const Gallery = () => {
               <p className="text-xl text-muted-foreground">No images in gallery yet</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {images.map((image, index) => (
                 <div
                   key={image.id}
-                  className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  className="relative animate-fade-in"
+                  style={{ animationDelay: `${index * 0.05}s` }}
                 >
+                  {image.title && (
+                    <p className="text-sm font-semibold text-foreground mb-2 truncate">
+                      {image.title}
+                    </p>
+                  )}
                   <img
                     src={image.image_url}
                     alt={image.title || "Gallery image"}
-                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-auto object-contain"
                   />
-                  {image.title && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <h3 className="text-white font-bold text-lg">{image.title}</h3>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
