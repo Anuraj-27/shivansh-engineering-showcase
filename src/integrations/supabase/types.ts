@@ -266,6 +266,7 @@ export type Database = {
       }
       processing_line_products: {
         Row: {
+          category: string
           created_at: string
           display_order: number | null
           id: string
@@ -274,6 +275,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          category?: string
           created_at?: string
           display_order?: number | null
           id?: string
@@ -282,6 +284,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          category?: string
           created_at?: string
           display_order?: number | null
           id?: string
