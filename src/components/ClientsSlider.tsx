@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, Phone, Mail } from "lucide-react";
 
 interface Client {
   id: string;
@@ -34,56 +33,18 @@ const ClientsSlider = () => {
 
   return (
     <div 
-      className="fixed right-0 top-0 h-screen w-[20%] min-w-[220px] max-w-[300px] z-40 overflow-hidden hidden lg:flex flex-col"
+      className="fixed right-0 top-0 h-screen w-[20%] min-w-[200px] max-w-[280px] z-40 overflow-hidden hidden lg:flex flex-col"
       style={{ backgroundColor: '#ED7D31' }}
     >
       {/* Static Header */}
-      <div className="flex-shrink-0 px-4 pt-6 pb-4">
+      <div className="flex-shrink-0 px-4 pt-8 pb-6 border-b border-white/20">
         <h2 className="text-xl font-bold text-white text-center tracking-wide uppercase">
           Our Clients
         </h2>
       </div>
 
-      {/* Static Contact Information */}
-      <div className="flex-shrink-0 px-4 pb-4 border-b border-white/20">
-        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 space-y-3">
-          {/* Address */}
-          <div className="flex items-start gap-2">
-            <MapPin className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-white/95 leading-relaxed">
-              Unit II, Gat No 882/1/3A,<br />
-              Behind Nisarg Hotel, Pune Nagar Road,<br />
-              Sanaswadi, Tal. Shirur,<br />
-              Dist. Pune (MH) 412 208
-            </p>
-          </div>
-
-          {/* Mobile */}
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-white flex-shrink-0" />
-            <a 
-              href="tel:8888845711" 
-              className="text-xs text-white/95 hover:text-white transition-colors"
-            >
-              8888845711
-            </a>
-          </div>
-
-          {/* Email */}
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-white flex-shrink-0" />
-            <a 
-              href="mailto:shivanshengineering@yahoo.in" 
-              className="text-xs text-white/95 hover:text-white transition-colors break-all"
-            >
-              shivanshengineering@yahoo.in
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Animated Client Cards Container */}
-      <div className="flex-1 overflow-hidden relative mt-3">
+      <div className="flex-1 overflow-hidden relative mt-4">
         <div 
           className="flex flex-col gap-3 px-3"
           style={{

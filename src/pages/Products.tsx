@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
+import ContactInfoBlock from "@/components/ContactInfoBlock";
 
 interface Client {
   id: string;
@@ -52,6 +53,8 @@ const Products = () => {
       
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
+          <ContactInfoBlock />
+          
           <h1 className="text-5xl md:text-6xl font-bold text-center mb-8 animate-fade-up">
             Our <span className="text-primary">Products</span>
           </h1>

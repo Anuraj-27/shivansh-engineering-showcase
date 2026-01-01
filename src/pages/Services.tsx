@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
+import ContactInfoBlock from "@/components/ContactInfoBlock";
 
 const services = [
   "Consultancy Service",
@@ -21,6 +22,8 @@ const Services = () => {
       
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-6">
+          <ContactInfoBlock />
+          
           {/* Page Heading */}
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
             Services for processing lines and equipments required for metal rolling industry
