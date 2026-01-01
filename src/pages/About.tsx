@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Target, Lightbulb, Heart } from "lucide-react";
+import ContactInfoBlock from "@/components/ContactInfoBlock";
 
 const About = () => {
   return (
@@ -9,6 +10,8 @@ const About = () => {
       
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
+          <ContactInfoBlock />
+          
           <h1 className="text-5xl md:text-6xl font-bold text-center mb-8 animate-fade-up">
             About <span className="text-primary">Shivansh Engineering</span>
           </h1>
