@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import logo1 from "@/assets/logo1.png";
 import logo2 from "@/assets/logo2.png";
+import { PROCESSING_LINE_CATEGORIES } from "@/lib/processingLineCategories";
 
 const Navigation = () => {
   return (
@@ -45,10 +50,27 @@ const Navigation = () => {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="bg-navbar border-navbar min-w-[160px]">
-                <DropdownMenuItem asChild className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground">
-                  <Link to="/processing-line" className="w-full">Processing Line</Link>
-                </DropdownMenuItem>
+              <DropdownMenuContent align="center" className="bg-navbar border-navbar min-w-[200px]">
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground data-[state=open]:bg-primary-foreground/10">
+                    <span>Processing Line</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent className="bg-navbar border-navbar min-w-[220px]">
+                      {PROCESSING_LINE_CATEGORIES.map((category) => (
+                        <DropdownMenuItem
+                          key={category.slug}
+                          asChild
+                          className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground"
+                        >
+                          <Link to={`/processing-line/${category.slug}`} className="w-full">
+                            {category.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
                 <DropdownMenuItem asChild className="cursor-pointer text-primary-foreground hover:bg-primary-foreground/10 focus:bg-primary-foreground/10 focus:text-primary-foreground">
                   <Link to="/equipments" className="w-full">Equipments</Link>
                 </DropdownMenuItem>

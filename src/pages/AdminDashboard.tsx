@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Trash2, Check, X, Upload, UserPlus, Shield, Plus, Edit, Save } from "lucide-react";
+import ProcessingLineAdmin from "@/components/admin/ProcessingLineAdmin";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ const AdminDashboard = () => {
   const [feedback, setFeedback] = useState<any[]>([]);
   const [machineryImages, setMachineryImages] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
-  const [processingLineProducts, setProcessingLineProducts] = useState<any[]>([]);
   const [equipments, setEquipments] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -46,20 +46,6 @@ const AdminDashboard = () => {
   const [newAdminEmail, setNewAdminEmail] = useState("");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [creatingAdmin, setCreatingAdmin] = useState(false);
-
-  // Processing Line form
-  const [plProductName, setPlProductName] = useState("");
-  const [plProductImage, setPlProductImage] = useState("");
-  const [editingPlProduct, setEditingPlProduct] = useState<string | null>(null);
-  const [editPlProductName, setEditPlProductName] = useState("");
-  const [editPlProductImage, setEditPlProductImage] = useState("");
-  
-  // Parameter form
-  const [newParamProductId, setNewParamProductId] = useState<string | null>(null);
-  const [newParamName, setNewParamName] = useState("");
-  const [newParamMin, setNewParamMin] = useState("0");
-  const [newParamMax, setNewParamMax] = useState("0");
-  const [newParamUnit, setNewParamUnit] = useState("mm");
 
   // Equipment form
   const [eqName, setEqName] = useState("");
@@ -166,33 +152,9 @@ const AdminDashboard = () => {
     setClients(clientsData || []);
     setFeedback(feedbackData || []);
     setMachineryImages(machineryData || []);
-    setGalleryImages(galleryData || []);
-    
-    // Fetch processing line products with parameters
-    await fetchProcessingLineProducts();
     
     // Fetch equipments with parameters
     await fetchEquipments();
-  };
-
-  const fetchProcessingLineProducts = async () => {
-    const { data: plProducts } = await supabase
-      .from("processing_line_products")
-      .select("*")
-      .order("display_order", { ascending: true });
-
-    const productsWithParams = await Promise.all(
-      (plProducts || []).map(async (product) => {
-        const { data: params } = await supabase
-          .from("processing_line_parameters")
-          .select("*")
-          .eq("product_id", product.id)
-          .order("display_order", { ascending: true });
-        return { ...product, parameters: params || [] };
-      })
-    );
-
-    setProcessingLineProducts(productsWithParams);
   };
 
   const fetchEquipments = async () => {
@@ -439,97 +401,6 @@ const AdminDashboard = () => {
     } else {
       toast.success("Gallery image deleted");
       fetchData();
-    }
-  };
-
-  // Processing Line functions
-  const addProcessingLineProduct = async () => {
-    if (!plProductName) {
-      toast.error("Please enter product name");
-      return;
-    }
-
-    const { error } = await supabase.from("processing_line_products").insert([
-      {
-        name: plProductName,
-        image_url: plProductImage || null,
-      },
-    ]);
-
-    if (error) {
-      toast.error("Failed to add product: " + error.message);
-    } else {
-      toast.success("Product added successfully");
-      setPlProductName("");
-      setPlProductImage("");
-      fetchProcessingLineProducts();
-    }
-  };
-
-  const updateProcessingLineProduct = async (id: string) => {
-    const { error } = await supabase
-      .from("processing_line_products")
-      .update({
-        name: editPlProductName,
-        image_url: editPlProductImage || null,
-      })
-      .eq("id", id);
-
-    if (error) {
-      toast.error("Failed to update product");
-    } else {
-      toast.success("Product updated");
-      setEditingPlProduct(null);
-      fetchProcessingLineProducts();
-    }
-  };
-
-  const deleteProcessingLineProduct = async (id: string) => {
-    const { error } = await supabase.from("processing_line_products").delete().eq("id", id);
-    if (error) {
-      toast.error("Failed to delete product");
-    } else {
-      toast.success("Product deleted");
-      fetchProcessingLineProducts();
-    }
-  };
-
-  const addParameter = async (productId: string) => {
-    if (!newParamName) {
-      toast.error("Please enter parameter name");
-      return;
-    }
-
-    const { error } = await supabase.from("processing_line_parameters").insert([
-      {
-        product_id: productId,
-        parameter_name: newParamName,
-        min_value: parseFloat(newParamMin) || 0,
-        max_value: parseFloat(newParamMax) || 0,
-        unit: newParamUnit || "mm",
-      },
-    ]);
-
-    if (error) {
-      toast.error("Failed to add parameter: " + error.message);
-    } else {
-      toast.success("Parameter added");
-      setNewParamProductId(null);
-      setNewParamName("");
-      setNewParamMin("0");
-      setNewParamMax("0");
-      setNewParamUnit("mm");
-      fetchProcessingLineProducts();
-    }
-  };
-
-  const deleteParameter = async (id: string) => {
-    const { error } = await supabase.from("processing_line_parameters").delete().eq("id", id);
-    if (error) {
-      toast.error("Failed to delete parameter");
-    } else {
-      toast.success("Parameter deleted");
-      fetchProcessingLineProducts();
     }
   };
 
@@ -977,260 +848,8 @@ const AdminDashboard = () => {
               ))}
             </TabsContent>
 
-            <TabsContent value="processing-line" className="space-y-8">
-              <Card className="p-6">
-                <h2 className="text-2xl font-bold mb-4">Add Processing Line Product</h2>
-                <div className="grid gap-4">
-                  <Input
-                    placeholder="Product Name"
-                    value={plProductName}
-                    onChange={(e) => setPlProductName(e.target.value)}
-                  />
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileUpload(e, setPlProductImage)}
-                        className="hidden"
-                        id="pl-product-image-upload"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => document.getElementById('pl-product-image-upload')?.click()}
-                        disabled={uploadingFile}
-                      >
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingFile ? "Uploading..." : "Browse Image"}
-                      </Button>
-                    </label>
-                    <Input
-                      placeholder="Or paste Image URL"
-                      value={plProductImage}
-                      onChange={(e) => setPlProductImage(e.target.value)}
-                    />
-                  </div>
-                  <Button onClick={addProcessingLineProduct}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Product
-                  </Button>
-                </div>
-              </Card>
-
-              <div className="space-y-6">
-                {processingLineProducts.map((product) => (
-                  <Card key={product.id} className="p-6">
-                    <div className="grid md:grid-cols-[200px_1fr] gap-6">
-                      {/* Product Image & Name */}
-                      <div className="flex flex-col items-center">
-                        <div className="w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
-                          {editingPlProduct === product.id ? (
-                            <div className="p-2 space-y-2 h-full flex flex-col justify-center">
-                              <Input
-                                placeholder="Image URL"
-                                value={editPlProductImage}
-                                onChange={(e) => setEditPlProductImage(e.target.value)}
-                                className="text-xs"
-                              />
-                              <label className="flex items-center gap-2 cursor-pointer">
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={(e) => handleFileUpload(e, setEditPlProductImage)}
-                                  className="hidden"
-                                  id={`edit-pl-image-${product.id}`}
-                                />
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => document.getElementById(`edit-pl-image-${product.id}`)?.click()}
-                                  disabled={uploadingFile}
-                                  className="w-full"
-                                >
-                                  <Upload className="w-3 h-3 mr-1" />
-                                  {uploadingFile ? "..." : "Browse"}
-                                </Button>
-                              </label>
-                            </div>
-                          ) : product.image_url ? (
-                            <img
-                              src={product.image_url}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-                              No Image
-                            </div>
-                          )}
-                        </div>
-                        {editingPlProduct === product.id ? (
-                          <Input
-                            value={editPlProductName}
-                            onChange={(e) => setEditPlProductName(e.target.value)}
-                            className="text-center"
-                          />
-                        ) : (
-                          <h3 className="text-lg font-bold text-center">{product.name}</h3>
-                        )}
-                        <div className="flex gap-2 mt-4">
-                          {editingPlProduct === product.id ? (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => updateProcessingLineProduct(product.id)}
-                              >
-                                <Save className="w-4 h-4 mr-1" />
-                                Save
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setEditingPlProduct(null)}
-                              >
-                                Cancel
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  setEditingPlProduct(product.id);
-                                  setEditPlProductName(product.name);
-                                  setEditPlProductImage(product.image_url || "");
-                                }}
-                              >
-                                <Edit className="w-4 h-4 mr-1" />
-                                Edit
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => deleteProcessingLineProduct(product.id)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Parameters Table */}
-                      <div>
-                        <h4 className="text-lg font-semibold mb-4">Supply Range Parameters</h4>
-                        <div className="border rounded-lg overflow-hidden mb-4">
-                          <table className="w-full">
-                            <thead className="bg-muted/50">
-                              <tr>
-                                <th className="px-4 py-2 text-left font-semibold">Parameter</th>
-                                <th className="px-4 py-2 text-center font-semibold">Min</th>
-                                <th className="px-4 py-2 text-center font-semibold">Max</th>
-                                <th className="px-4 py-2 text-center font-semibold">Unit</th>
-                                <th className="px-4 py-2 text-center font-semibold w-16">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {product.parameters.length > 0 ? (
-                                product.parameters.map((param: any) => (
-                                  <tr key={param.id} className="border-t">
-                                    <td className="px-4 py-2">{param.parameter_name}</td>
-                                    <td className="px-4 py-2 text-center">{param.min_value}</td>
-                                    <td className="px-4 py-2 text-center">{param.max_value}</td>
-                                    <td className="px-4 py-2 text-center">{param.unit}</td>
-                                    <td className="px-4 py-2 text-center">
-                                      <Button
-                                        size="sm"
-                                        variant="ghost"
-                                        onClick={() => deleteParameter(param.id)}
-                                        className="text-destructive hover:text-destructive"
-                                      >
-                                        <Trash2 className="w-4 h-4" />
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                ))
-                              ) : (
-                                <tr>
-                                  <td colSpan={5} className="px-4 py-4 text-center text-muted-foreground">
-                                    No parameters added yet
-                                  </td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-
-                        {/* Add Parameter Form */}
-                        {newParamProductId === product.id ? (
-                          <div className="flex flex-wrap gap-2 items-end">
-                            <Input
-                              placeholder="Parameter Name"
-                              value={newParamName}
-                              onChange={(e) => setNewParamName(e.target.value)}
-                              className="flex-1 min-w-[150px]"
-                            />
-                            <Input
-                              placeholder="Min"
-                              type="number"
-                              value={newParamMin}
-                              onChange={(e) => setNewParamMin(e.target.value)}
-                              className="w-20"
-                            />
-                            <Input
-                              placeholder="Max"
-                              type="number"
-                              value={newParamMax}
-                              onChange={(e) => setNewParamMax(e.target.value)}
-                              className="w-20"
-                            />
-                            <Input
-                              placeholder="Unit"
-                              value={newParamUnit}
-                              onChange={(e) => setNewParamUnit(e.target.value)}
-                              className="w-20"
-                            />
-                            <Button size="sm" onClick={() => addParameter(product.id)}>
-                              Add
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                setNewParamProductId(null);
-                                setNewParamName("");
-                                setNewParamMin("0");
-                                setNewParamMax("0");
-                                setNewParamUnit("mm");
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setNewParamProductId(product.id)}
-                          >
-                            <Plus className="w-4 h-4 mr-1" />
-                            Add Parameter
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-
-                {processingLineProducts.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">
-                    No processing line products yet. Add your first product above.
-                  </p>
-                )}
-              </div>
+            <TabsContent value="processing-line">
+              <ProcessingLineAdmin />
             </TabsContent>
 
             <TabsContent value="equipments" className="space-y-8">
