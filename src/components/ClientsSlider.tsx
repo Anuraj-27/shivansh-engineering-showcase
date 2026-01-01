@@ -33,7 +33,7 @@ const ClientsSlider = () => {
 
   return (
     <div 
-      className="fixed right-0 top-0 h-screen w-[15%] min-w-[120px] max-w-[200px] z-40 overflow-hidden hidden lg:block"
+      className="fixed right-0 top-0 h-screen w-[30%] min-w-[200px] max-w-[350px] z-40 overflow-hidden hidden lg:block"
       style={{ backgroundColor: '#ED7D31' }}
     >
       <div 
