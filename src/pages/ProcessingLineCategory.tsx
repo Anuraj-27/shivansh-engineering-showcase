@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
-import SpecificationCard from "@/components/SpecificationCard";
+import FixedSpecificationTable from "@/components/FixedSpecificationTable";
 import { PROCESSING_LINE_CATEGORIES, getCategoryName } from "@/lib/processingLineCategories";
-
-interface Parameter {
-  id: string;
-  parameter_name: string;
-  min_value: number;
-  max_value: number;
-  unit: string;
-  display_order: number;
-}
+import { FixedSpecificationData } from "@/lib/fixedParameters";
 
 interface ProcessingLineProduct {
   id: string;
   name: string;
   image_url: string | null;
   display_order: number;
-  parameters: Parameter[];
+  sheet_width_min: number;
+  sheet_width_max: number;
+  sheet_thickness_min: number;
+  sheet_thickness_max: number;
+  line_speed_min: number;
+  line_speed_max: number;
+  coil_weight_min: number;
+  coil_weight_max: number;
+  material: string;
 }
 
 const ProcessingLineCategory = () => {
@@ -51,24 +51,21 @@ const ProcessingLineCategory = () => {
       return;
     }
 
-    const productsWithParams: ProcessingLineProduct[] = await Promise.all(
-      (productsData || []).map(async (product) => {
-        const { data: paramsData } = await supabase
-          .from("processing_line_parameters")
-          .select("*")
-          .eq("product_id", product.id)
-          .order("display_order", { ascending: true });
-
-        return {
-          ...product,
-          parameters: paramsData || [],
-        };
-      })
-    );
-
-    setProducts(productsWithParams);
+    setProducts(productsData || []);
     setLoading(false);
   };
+
+  const getSpecificationData = (product: ProcessingLineProduct): FixedSpecificationData => ({
+    sheet_width_min: product.sheet_width_min,
+    sheet_width_max: product.sheet_width_max,
+    sheet_thickness_min: product.sheet_thickness_min,
+    sheet_thickness_max: product.sheet_thickness_max,
+    line_speed_min: product.line_speed_min,
+    line_speed_max: product.line_speed_max,
+    coil_weight_min: product.coil_weight_min,
+    coil_weight_max: product.coil_weight_max,
+    material: product.material,
+  });
 
   if (!isValidCategory) {
     return (
@@ -108,11 +105,11 @@ const ProcessingLineCategory = () => {
           ) : (
             <div className="space-y-8">
               {products.map((product) => (
-                <SpecificationCard
+                <FixedSpecificationTable
                   key={product.id}
                   name={product.name}
                   imageUrl={product.image_url}
-                  parameters={product.parameters}
+                  data={getSpecificationData(product)}
                 />
               ))}
             </div>

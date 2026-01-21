@@ -35,73 +35,56 @@ export type Database = {
         }
         Relationships: []
       }
-      equipment_parameters: {
-        Row: {
-          created_at: string
-          display_order: number | null
-          equipment_id: string
-          id: string
-          max_value: number
-          min_value: number
-          parameter_name: string
-          unit: string
-        }
-        Insert: {
-          created_at?: string
-          display_order?: number | null
-          equipment_id: string
-          id?: string
-          max_value?: number
-          min_value?: number
-          parameter_name?: string
-          unit?: string
-        }
-        Update: {
-          created_at?: string
-          display_order?: number | null
-          equipment_id?: string
-          id?: string
-          max_value?: number
-          min_value?: number
-          parameter_name?: string
-          unit?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "equipment_parameters_equipment_id_fkey"
-            columns: ["equipment_id"]
-            isOneToOne: false
-            referencedRelation: "equipments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       equipments: {
         Row: {
+          coil_weight_max: number
+          coil_weight_min: number
           created_at: string
           display_order: number | null
           id: string
           image_url: string | null
+          line_speed_max: number
+          line_speed_min: number
           material: string
           name: string
+          sheet_thickness_max: number
+          sheet_thickness_min: number
+          sheet_width_max: number
+          sheet_width_min: number
           updated_at: string
         }
         Insert: {
+          coil_weight_max?: number
+          coil_weight_min?: number
           created_at?: string
           display_order?: number | null
           id?: string
           image_url?: string | null
+          line_speed_max?: number
+          line_speed_min?: number
           material?: string
           name?: string
+          sheet_thickness_max?: number
+          sheet_thickness_min?: number
+          sheet_width_max?: number
+          sheet_width_min?: number
           updated_at?: string
         }
         Update: {
+          coil_weight_max?: number
+          coil_weight_min?: number
           created_at?: string
           display_order?: number | null
           id?: string
           image_url?: string | null
+          line_speed_max?: number
+          line_speed_min?: number
           material?: string
           name?: string
+          sheet_thickness_max?: number
+          sheet_thickness_min?: number
+          sheet_width_max?: number
+          sheet_width_min?: number
           updated_at?: string
         }
         Relationships: []
@@ -223,73 +206,59 @@ export type Database = {
         }
         Relationships: []
       }
-      processing_line_parameters: {
-        Row: {
-          created_at: string
-          display_order: number | null
-          id: string
-          max_value: number
-          min_value: number
-          parameter_name: string
-          product_id: string
-          unit: string
-        }
-        Insert: {
-          created_at?: string
-          display_order?: number | null
-          id?: string
-          max_value?: number
-          min_value?: number
-          parameter_name?: string
-          product_id: string
-          unit?: string
-        }
-        Update: {
-          created_at?: string
-          display_order?: number | null
-          id?: string
-          max_value?: number
-          min_value?: number
-          parameter_name?: string
-          product_id?: string
-          unit?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "processing_line_parameters_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "processing_line_products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       processing_line_products: {
         Row: {
           category: string
+          coil_weight_max: number
+          coil_weight_min: number
           created_at: string
           display_order: number | null
           id: string
           image_url: string | null
+          line_speed_max: number
+          line_speed_min: number
+          material: string
           name: string
+          sheet_thickness_max: number
+          sheet_thickness_min: number
+          sheet_width_max: number
+          sheet_width_min: number
           updated_at: string
         }
         Insert: {
           category?: string
+          coil_weight_max?: number
+          coil_weight_min?: number
           created_at?: string
           display_order?: number | null
           id?: string
           image_url?: string | null
+          line_speed_max?: number
+          line_speed_min?: number
+          material?: string
           name?: string
+          sheet_thickness_max?: number
+          sheet_thickness_min?: number
+          sheet_width_max?: number
+          sheet_width_min?: number
           updated_at?: string
         }
         Update: {
           category?: string
+          coil_weight_max?: number
+          coil_weight_min?: number
           created_at?: string
           display_order?: number | null
           id?: string
           image_url?: string | null
+          line_speed_max?: number
+          line_speed_min?: number
+          material?: string
           name?: string
+          sheet_thickness_max?: number
+          sheet_thickness_min?: number
+          sheet_width_max?: number
+          sheet_width_min?: number
           updated_at?: string
         }
         Relationships: []
