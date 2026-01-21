@@ -16,7 +16,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Services from "./pages/Services";
 import NotFound from "./pages/NotFound";
 import ClientsSlider from "./components/ClientsSlider";
-import BusinessCard from "./components/BusinessCard";
 
 const queryClient = new QueryClient();
 
@@ -31,8 +30,7 @@ const AppContent = () => {
 
   return (
     <div className="flex w-full">
-      {shouldShowSlider && <BusinessCard />}
-      <div className={`flex-1 ${shouldShowSlider ? 'lg:ml-[20%] lg:mr-[30%] lg:min-w-0' : ''}`}>
+      <div className={`flex-1 ${shouldShowSlider ? 'lg:mr-[20%] lg:min-w-0' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
