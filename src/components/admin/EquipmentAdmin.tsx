@@ -3,24 +3,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
-import { Trash2, Edit, Save, Upload } from "lucide-react";
-import { PROCESSING_LINE_CATEGORIES, getCategoryName } from "@/lib/processingLineCategories";
+import { Trash2, Edit, Save, Upload, Plus } from "lucide-react";
 import { FixedSpecificationData, DEFAULT_SPECIFICATION_DATA } from "@/lib/fixedParameters";
 import FixedParameterEditor from "@/components/admin/FixedParameterEditor";
 
-interface Product {
+interface Equipment {
   id: string;
   name: string;
   image_url: string | null;
-  category: string;
   display_order: number;
   sheet_width_min: number;
   sheet_width_max: number;
@@ -33,25 +24,24 @@ interface Product {
   material: string;
 }
 
-const ProcessingLineAdmin = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>(PROCESSING_LINE_CATEGORIES[0].slug);
-  const [products, setProducts] = useState<Product[]>([]);
+const EquipmentAdmin = () => {
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
 
-  // Product form
-  const [productName, setProductName] = useState("");
-  const [productImage, setProductImage] = useState("");
+  // Equipment form
+  const [eqName, setEqName] = useState("");
+  const [eqImage, setEqImage] = useState("");
 
   // Editing state
-  const [editingProduct, setEditingProduct] = useState<string | null>(null);
-  const [editProductName, setEditProductName] = useState("");
-  const [editProductImage, setEditProductImage] = useState("");
-  const [editProductData, setEditProductData] = useState<FixedSpecificationData>(DEFAULT_SPECIFICATION_DATA);
+  const [editingEquipment, setEditingEquipment] = useState<string | null>(null);
+  const [editEqName, setEditEqName] = useState("");
+  const [editEqImage, setEditEqImage] = useState("");
+  const [editEqData, setEditEqData] = useState<FixedSpecificationData>(DEFAULT_SPECIFICATION_DATA);
 
   useEffect(() => {
-    fetchProducts();
-  }, [selectedCategory]);
+    fetchEquipments();
+  }, []);
 
   const uploadFile = async (file: File, folder: string): Promise<string | null> => {
     try {
@@ -81,148 +71,127 @@ const ProcessingLineAdmin = () => {
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    const url = await uploadFile(file, 'processing-line');
+    const url = await uploadFile(file, 'equipments');
     if (url) {
       setUrlFunction(url);
       toast.success("File uploaded successfully");
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchEquipments = async () => {
     setLoading(true);
-    const { data: productsData, error } = await supabase
-      .from("processing_line_products")
+    const { data: eqData, error } = await supabase
+      .from("equipments")
       .select("*")
-      .eq("category", selectedCategory)
       .order("display_order", { ascending: true });
 
     if (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching equipments:", error);
       setLoading(false);
       return;
     }
 
-    setProducts(productsData || []);
+    setEquipments(eqData || []);
     setLoading(false);
   };
 
-  const addProduct = async () => {
-    if (!productName) {
-      toast.error("Please enter product name");
+  const addEquipment = async () => {
+    if (!eqName) {
+      toast.error("Please enter equipment name");
       return;
     }
 
-    const { error } = await supabase.from("processing_line_products").insert([
+    const { error } = await supabase.from("equipments").insert([
       {
-        name: productName,
-        image_url: productImage || null,
-        category: selectedCategory,
+        name: eqName,
+        image_url: eqImage || null,
       },
     ]);
 
     if (error) {
-      toast.error("Failed to add product: " + error.message);
+      toast.error("Failed to add equipment: " + error.message);
     } else {
-      toast.success("Product added successfully");
-      setProductName("");
-      setProductImage("");
-      fetchProducts();
+      toast.success("Equipment added successfully");
+      setEqName("");
+      setEqImage("");
+      fetchEquipments();
     }
   };
 
-  const updateProduct = async (id: string) => {
+  const updateEquipment = async (id: string) => {
     const { error } = await supabase
-      .from("processing_line_products")
+      .from("equipments")
       .update({
-        name: editProductName,
-        image_url: editProductImage || null,
-        ...editProductData,
+        name: editEqName,
+        image_url: editEqImage || null,
+        ...editEqData,
       })
       .eq("id", id);
 
     if (error) {
-      toast.error("Failed to update product");
+      toast.error("Failed to update equipment");
     } else {
-      toast.success("Product updated");
-      setEditingProduct(null);
-      fetchProducts();
+      toast.success("Equipment updated");
+      setEditingEquipment(null);
+      fetchEquipments();
     }
   };
 
-  const deleteProduct = async (id: string) => {
-    const { error } = await supabase.from("processing_line_products").delete().eq("id", id);
+  const deleteEquipment = async (id: string) => {
+    const { error } = await supabase.from("equipments").delete().eq("id", id);
     if (error) {
-      toast.error("Failed to delete product");
+      toast.error("Failed to delete equipment");
     } else {
-      toast.success("Product deleted");
-      fetchProducts();
+      toast.success("Equipment deleted");
+      fetchEquipments();
     }
   };
 
   const handleEditDataChange = (field: keyof FixedSpecificationData, value: number | string) => {
-    setEditProductData(prev => ({ ...prev, [field]: value }));
+    setEditEqData(prev => ({ ...prev, [field]: value }));
   };
 
-  const startEditing = (product: Product) => {
-    setEditingProduct(product.id);
-    setEditProductName(product.name);
-    setEditProductImage(product.image_url || "");
-    setEditProductData({
-      sheet_width_min: product.sheet_width_min,
-      sheet_width_max: product.sheet_width_max,
-      sheet_thickness_min: product.sheet_thickness_min,
-      sheet_thickness_max: product.sheet_thickness_max,
-      line_speed_min: product.line_speed_min,
-      line_speed_max: product.line_speed_max,
-      coil_weight_min: product.coil_weight_min,
-      coil_weight_max: product.coil_weight_max,
-      material: product.material,
+  const startEditing = (equipment: Equipment) => {
+    setEditingEquipment(equipment.id);
+    setEditEqName(equipment.name);
+    setEditEqImage(equipment.image_url || "");
+    setEditEqData({
+      sheet_width_min: equipment.sheet_width_min,
+      sheet_width_max: equipment.sheet_width_max,
+      sheet_thickness_min: equipment.sheet_thickness_min,
+      sheet_thickness_max: equipment.sheet_thickness_max,
+      line_speed_min: equipment.line_speed_min,
+      line_speed_max: equipment.line_speed_max,
+      coil_weight_min: equipment.coil_weight_min,
+      coil_weight_max: equipment.coil_weight_max,
+      material: equipment.material,
     });
   };
 
   return (
     <div className="space-y-8">
-      {/* Category Selector */}
+      {/* Add Equipment Form */}
       <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Select Processing Line Category</h2>
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-full max-w-md">
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            {PROCESSING_LINE_CATEGORIES.map((cat) => (
-              <SelectItem key={cat.slug} value={cat.slug}>
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </Card>
-
-      {/* Add Product Form */}
-      <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-4">
-          Add Product to {getCategoryName(selectedCategory)}
-        </h2>
+        <h2 className="text-2xl font-bold mb-4">Add Equipment</h2>
         <div className="grid gap-4">
           <Input
-            placeholder="Product Name"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            placeholder="Equipment Name"
+            value={eqName}
+            onChange={(e) => setEqName(e.target.value)}
           />
           <div className="space-y-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileUpload(e, setProductImage)}
+                onChange={(e) => handleFileUpload(e, setEqImage)}
                 className="hidden"
-                id="pl-product-image-upload"
+                id="eq-image-upload"
               />
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => document.getElementById('pl-product-image-upload')?.click()}
+                onClick={() => document.getElementById('eq-image-upload')?.click()}
                 disabled={uploadingFile}
               >
                 <Upload className="w-4 h-4 mr-2" />
@@ -231,52 +200,53 @@ const ProcessingLineAdmin = () => {
             </label>
             <Input
               placeholder="Or paste Image URL"
-              value={productImage}
-              onChange={(e) => setProductImage(e.target.value)}
+              value={eqImage}
+              onChange={(e) => setEqImage(e.target.value)}
             />
           </div>
-          <Button onClick={addProduct}>
-            Add Product
+          <Button onClick={addEquipment}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Equipment
           </Button>
         </div>
       </Card>
 
-      {/* Products List */}
+      {/* Equipments List */}
       {loading ? (
-        <p className="text-center text-muted-foreground py-8">Loading products...</p>
-      ) : products.length === 0 ? (
+        <p className="text-center text-muted-foreground py-8">Loading equipments...</p>
+      ) : equipments.length === 0 ? (
         <p className="text-center text-muted-foreground py-8">
-          No products in {getCategoryName(selectedCategory)} yet. Add your first product above.
+          No equipments yet. Add your first equipment above.
         </p>
       ) : (
         <div className="space-y-6">
-          {products.map((product) => (
-            <Card key={product.id} className="p-6">
+          {equipments.map((equipment) => (
+            <Card key={equipment.id} className="p-6">
               <div className="grid md:grid-cols-[200px_1fr] gap-6">
-                {/* Product Image & Name */}
+                {/* Equipment Image & Name */}
                 <div className="flex flex-col items-center">
                   <div className="w-full aspect-square bg-muted rounded-lg overflow-hidden mb-4">
-                    {editingProduct === product.id ? (
+                    {editingEquipment === equipment.id ? (
                       <div className="p-2 space-y-2 h-full flex flex-col justify-center">
                         <Input
                           placeholder="Image URL"
-                          value={editProductImage}
-                          onChange={(e) => setEditProductImage(e.target.value)}
+                          value={editEqImage}
+                          onChange={(e) => setEditEqImage(e.target.value)}
                           className="text-xs"
                         />
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="file"
                             accept="image/*"
-                            onChange={(e) => handleFileUpload(e, setEditProductImage)}
+                            onChange={(e) => handleFileUpload(e, setEditEqImage)}
                             className="hidden"
-                            id={`edit-pl-image-${product.id}`}
+                            id={`edit-eq-image-${equipment.id}`}
                           />
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => document.getElementById(`edit-pl-image-${product.id}`)?.click()}
+                            onClick={() => document.getElementById(`edit-eq-image-${equipment.id}`)?.click()}
                             disabled={uploadingFile}
                             className="w-full"
                           >
@@ -285,10 +255,10 @@ const ProcessingLineAdmin = () => {
                           </Button>
                         </label>
                       </div>
-                    ) : product.image_url ? (
+                    ) : equipment.image_url ? (
                       <img
-                        src={product.image_url}
-                        alt={product.name}
+                        src={equipment.image_url}
+                        alt={equipment.name}
                         className="w-full h-full object-contain"
                       />
                     ) : (
@@ -297,23 +267,23 @@ const ProcessingLineAdmin = () => {
                       </div>
                     )}
                   </div>
-                  {editingProduct === product.id ? (
+                  {editingEquipment === equipment.id ? (
                     <Input
-                      value={editProductName}
-                      onChange={(e) => setEditProductName(e.target.value)}
+                      value={editEqName}
+                      onChange={(e) => setEditEqName(e.target.value)}
                       className="text-center"
                     />
                   ) : (
-                    <h3 className="text-lg font-bold text-center">{product.name}</h3>
+                    <h3 className="text-lg font-bold text-center">{equipment.name}</h3>
                   )}
                   <div className="flex gap-2 mt-4">
-                    {editingProduct === product.id ? (
+                    {editingEquipment === equipment.id ? (
                       <>
-                        <Button size="sm" onClick={() => updateProduct(product.id)}>
+                        <Button size="sm" onClick={() => updateEquipment(equipment.id)}>
                           <Save className="w-4 h-4 mr-1" />
                           Save
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditingProduct(null)}>
+                        <Button size="sm" variant="outline" onClick={() => setEditingEquipment(null)}>
                           Cancel
                         </Button>
                       </>
@@ -322,7 +292,7 @@ const ProcessingLineAdmin = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => startEditing(product)}
+                          onClick={() => startEditing(equipment)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
                           Edit
@@ -330,7 +300,7 @@ const ProcessingLineAdmin = () => {
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => deleteProduct(product.id)}
+                          onClick={() => deleteEquipment(equipment.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -342,23 +312,23 @@ const ProcessingLineAdmin = () => {
                 {/* Fixed Specification Table */}
                 <div>
                   <h4 className="text-lg font-semibold mb-4">Specification (Edit Min/Max Values Only)</h4>
-                  {editingProduct === product.id ? (
+                  {editingEquipment === equipment.id ? (
                     <FixedParameterEditor
-                      data={editProductData}
+                      data={editEqData}
                       onChange={handleEditDataChange}
                     />
                   ) : (
                     <FixedParameterEditor
                       data={{
-                        sheet_width_min: product.sheet_width_min,
-                        sheet_width_max: product.sheet_width_max,
-                        sheet_thickness_min: product.sheet_thickness_min,
-                        sheet_thickness_max: product.sheet_thickness_max,
-                        line_speed_min: product.line_speed_min,
-                        line_speed_max: product.line_speed_max,
-                        coil_weight_min: product.coil_weight_min,
-                        coil_weight_max: product.coil_weight_max,
-                        material: product.material,
+                        sheet_width_min: equipment.sheet_width_min,
+                        sheet_width_max: equipment.sheet_width_max,
+                        sheet_thickness_min: equipment.sheet_thickness_min,
+                        sheet_thickness_max: equipment.sheet_thickness_max,
+                        line_speed_min: equipment.line_speed_min,
+                        line_speed_max: equipment.line_speed_max,
+                        coil_weight_min: equipment.coil_weight_min,
+                        coil_weight_max: equipment.coil_weight_max,
+                        material: equipment.material,
                       }}
                       onChange={() => {}}
                       disabled
@@ -374,4 +344,4 @@ const ProcessingLineAdmin = () => {
   );
 };
 
-export default ProcessingLineAdmin;
+export default EquipmentAdmin;
