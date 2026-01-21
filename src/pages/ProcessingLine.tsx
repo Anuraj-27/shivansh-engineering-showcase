@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { PROCESSING_LINE_CATEGORIES } from "@/lib/processingLineCategories";
-import ContactInfoBlock from "@/components/ContactInfoBlock";
 
 const ProcessingLine = () => {
   return (
@@ -11,8 +10,6 @@ const ProcessingLine = () => {
 
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
-          <ContactInfoBlock />
-          
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Processing <span className="text-primary">Lines</span>
           </h1>
