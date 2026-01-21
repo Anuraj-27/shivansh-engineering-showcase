@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import SpecificationCard from "@/components/SpecificationCard";
-import ContactInfoBlock from "@/components/ContactInfoBlock";
 
 interface EquipmentParameter {
   id: string;
@@ -57,8 +56,6 @@ const Equipments = () => {
 
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
-          <ContactInfoBlock />
-          
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
             Our <span className="text-primary">Equipments</span>
           </h1>
