@@ -4,7 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import businessCard from "@/assets/business-card.jpeg";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -103,18 +104,12 @@ const Contact = () => {
             </Card>
 
             <Card className="p-8 border-border/50 hover:shadow-xl transition-all animate-fade-in" style={{ animationDelay: "300ms" }}>
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-foreground mb-2">Business Hours</h3>
-                  <p className="text-muted-foreground">
-                    Monday - Wednesday: Open<br />
-                    Thursday: Closed<br />
-                    Friday - Sunday: Open
-                  </p>
-                </div>
+              <div className="flex items-center justify-center">
+                <img 
+                  src={businessCard} 
+                  alt="Shivansh Engineering - Sunil Kokate, Proprietor"
+                  className="w-full max-w-[280px] h-auto rounded-lg shadow-lg"
+                />
               </div>
             </Card>
           </div>
