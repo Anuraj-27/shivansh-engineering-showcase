@@ -39,7 +39,7 @@ const ClientsSlider = () => {
       {/* Static Header */}
       <div className="flex-shrink-0 px-4 pt-8 pb-6 border-b border-white/20">
         <h2 className="text-xl font-bold text-white text-center tracking-wide uppercase">
-          Our Clients
+          Our Partners
         </h2>
       </div>
 
