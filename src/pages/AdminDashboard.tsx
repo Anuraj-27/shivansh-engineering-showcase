@@ -397,12 +397,10 @@ const AdminDashboard = () => {
             </Button>
           </div>
 
-          <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-9 mb-8">
-              <TabsTrigger value="products">Products</TabsTrigger>
+          <Tabs defaultValue="processing-line" className="w-full">
+            <TabsList className="grid w-full grid-cols-7 mb-8">
               <TabsTrigger value="processing-line">Processing Line</TabsTrigger>
               <TabsTrigger value="equipments">Equipments</TabsTrigger>
-              <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="clients">Clients</TabsTrigger>
               <TabsTrigger value="machinery">Machinery</TabsTrigger>
               <TabsTrigger value="gallery">Gallery</TabsTrigger>
@@ -410,7 +408,8 @@ const AdminDashboard = () => {
               <TabsTrigger value="admins">Admins</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="products" className="space-y-8">
+            <TabsContent value="_unused_products" className="hidden">
+
               <Card className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
                 <div className="grid gap-4">
