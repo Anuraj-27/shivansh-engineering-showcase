@@ -31,7 +31,7 @@ const Services = () => {
             {services.map((service, index) => (
               <Card
                 key={index}
-                className="p-6 border border-border/50 hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-default"
+                className="p-6 border border-border/50 shadow-md hover:shadow-xl hover:border-primary/50 transition-all duration-300 cursor-default"
               >
                 <p className="text-lg font-medium text-center text-foreground">
                   {service}
