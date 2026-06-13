@@ -50,12 +50,6 @@ const Contact = () => {
       
       <div className="pt-32 pb-20">
         <div className="container mx-auto px-6">
-          <h1 className="text-5xl md:text-6xl font-bold text-center mb-8 animate-fade-up">
-            Get In <span className="text-primary">Touch</span>
-          </h1>
-          <p className="text-xl text-center text-muted-foreground mb-16 max-w-3xl mx-auto animate-fade-in">
-            Have questions? We're here to help. Reach out to us and we'll respond as soon as possible.
-          </p>
 
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
             <Card className="p-8 border-border/50 hover:shadow-xl transition-all animate-fade-in">
