@@ -5,11 +5,11 @@ export const PROCESSING_LINE_CATEGORIES = [
   { slug: "wetflux-galvanizing-line", name: "Wetflux Galvanizing Line" },
   { slug: "degreasing-cleaning-line", name: "Degreasing / Cleaning Line" },
   { slug: "annealing-line", name: "Annealing Line" },
-  { slug: "color-coating-line", name: "Color Coating Line" },
+  { slug: "tension-leveling-line", name: "Tension Leveling Line" },
+  { slug: "color-coating-line", name: "Terminal Equipment for CCL" },
+  { slug: "terminal-equipment-cgl", name: "Terminal Equipment for CGL" },
   { slug: "rewinding-line", name: "Rewinding Line" },
-  { slug: "inspection-line", name: "Inspection Line" },
-  { slug: "edge-preparation-line", name: "Edge Preparation Line" },
-  { slug: "rolling-mill-terminal-equipments", name: "Rolling Mill Terminal Equipment's" },
+  { slug: "rolling-mill-terminal-equipments", name: "Terminal Equipment's Rolling Mill" },
   { slug: "coil-handling-equipments", name: "Coil Handling Equipment's" },
 ] as const;
 
